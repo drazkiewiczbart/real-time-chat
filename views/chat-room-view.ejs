@@ -1,7 +1,10 @@
 <%- include('templates/header-view') -%>
 <h1>Chat room</h1>
+<ul></ul>
 <form action="">
   <input type="text" />
   <button>Submit</button>
 </form>
+<script src="/socket.io/socket.io.js"></script>
+<script src="javascripts/socket-client-side.js"></script>
 <%- include('templates/footer-view') -%>
