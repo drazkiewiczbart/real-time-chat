@@ -2,8 +2,17 @@ const http = require('http');
 const express = require('express');
 const app = express();
 const server = http.createServer(app);
-const { port, host } = require('./config');
+const mongoose = require('mongoose');
+const { port, host, dbURI, dbConfig } = require('./config');
 
-server.listen(port, host, () => {
-  console.log(`Server is running on ${host}:${port}.`);
-});
+(async () => {
+  try {
+    await mongoose.connect(dbURI, dbConfig);
+    console.log('Database connection status: connected');
+    server.listen(port, host, () => {
+      console.log(`Server is listening on ${host}:${port}`);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+})();
