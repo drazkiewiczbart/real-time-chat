@@ -26,9 +26,13 @@
   },
   "homepage": "https://github.com/drazkiewiczbart/real-time-chat-cl#readme",
   "dependencies": {
+    "connect-mongodb-session": "^2.4.1",
     "dotenv": "^8.2.0",
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "mongoose": "^5.11.15"
+    "express-session": "^1.17.1",
+    "mongoose": "^5.11.15",
+    "socket.io": "^3.1.1"
   },
   "devDependencies": {
     "eslint": "^7.20.0",

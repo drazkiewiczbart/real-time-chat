@@ -3,7 +3,17 @@ const express = require('express');
 const app = express();
 const server = http.createServer(app);
 const mongoose = require('mongoose');
-const { port, host, dbURI, dbConfig } = require('./config');
+const session = require('express-session');
+// const MongoDBStore = require('connect-mongodb-session')(session);
+const path = require('path');
+const { port, host, dbURI, dbConfig, sessionConfig } = require('./config');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/../views'));
+
+app.use(session(sessionConfig));
+
+require('../routers/chat-room-router')(app);
 
 (async () => {
   try {

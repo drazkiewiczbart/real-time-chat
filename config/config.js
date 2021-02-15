@@ -9,9 +9,20 @@ const dbConfig = {
   useUnifiedTopology: true,
 };
 
+const sessionConfig = {
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  httpOnly: true,
+  cookie: {
+    secure: false,
+  },
+};
+
 module.exports = {
   port: process.env.PORT,
   host: process.env.HOST,
   dbURI,
   dbConfig,
+  sessionConfig,
 };
