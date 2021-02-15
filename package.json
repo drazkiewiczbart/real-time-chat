@@ -1,0 +1,28 @@
+{
+  "name": "real-time-chat-cl",
+  "version": "1.0.0",
+  "description": "Real time chat with command line.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node config/index",
+    "dev": "nodemon config/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drazkiewiczbart/real-time-chat-cl.git"
+  },
+  "keywords": [
+    "Chat",
+    "Room",
+    "Real",
+    "Time",
+    "Command",
+    "Line"
+  ],
+  "author": "Bartłomiej Drążkiewicz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/drazkiewiczbart/real-time-chat-cl/issues"
+  },
+  "homepage": "https://github.com/drazkiewiczbart/real-time-chat-cl#readme"
+}
