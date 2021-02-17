@@ -7,7 +7,7 @@ const expressSession = require('express-session');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(expressSession);
 const io = require('socket.io')(server);
-require('./socket-server-side')(io);
+require('../libs/socket-io-server')(io);
 const path = require('path');
 const {
   port,
