@@ -1,10 +1,29 @@
 <%- include('templates/header-view') -%>
-<h1>Chat room</h1>
-<ul></ul>
-<form action="">
-  <input type="text" />
-  <button>Submit</button>
-</form>
+<div class="container">
+  <div class="row d-flex justify-content-center">
+    <div
+      class="col col-sm-8 col-md-8 col-lg-7 col-xl-7 col-xxl-7 p-3 text-center"
+    >
+      <h1>Chat room</h1>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div
+      id="messages-wrapper"
+      class="col col-sm-8 col-md-8 col-lg-7 col-xl-7 col-xxl-7 p-3"
+    ></div>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div
+      class="col col-sm-8 col-md-8 col-lg-7 col-xl-7 col-xxl-7 p-3 text-center"
+    >
+      <form action="">
+        <input type="text" />
+        <button>Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="javascripts/socket-io-client.js"></script>
 <%- include('templates/footer-view') -%>

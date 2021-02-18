@@ -1,0 +1,39 @@
+html {
+  font-size: 10px;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  color: #ffffff;
+  background-color: #001730;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-height: 80vh;
+}
+
+#messages-wrapper {
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.message {
+  border-radius: 0.5rem;
+  color: #001730;
+  background-color: #4ad7d1;
+}
+
+.message-data {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.message-content {
+  font-size: 1.6rem;
+}
