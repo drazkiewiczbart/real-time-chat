@@ -6,6 +6,8 @@ const server = http.createServer(app);
 const expressSession = require('express-session');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(expressSession);
+require('../models/user-model')(mongoose);
+require('../models/room-model')(mongoose);
 const io = require('socket.io')(server);
 require('../libs/socket-io-server')(io);
 const path = require('path');
