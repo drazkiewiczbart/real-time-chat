@@ -1,31 +1,32 @@
-const mongoose = require('mongoose');
-const User = mongoose.model('Users');
-const {
-  serverResponse,
-  newUserConnection,
-  userDisconnect,
-} = require('./socket-io-utilities');
+const { sendMessage } = require('./socket-io-send-message');
+const { joinToRoom } = require('./socket-io-join-to-room');
+const { changeName } = require('./socket-io-change-name');
+const { leaveRoom } = require('./socket-io-leave-room');
+const { newUserConnection } = require('./socket-io-new-user-connection');
+const { userDisconnect } = require('./socket-io-user-disconnect');
 
 module.exports = (io) => {
-  io.on('connection', (socket) => {
-    newUserConnection(socket);
-    socket.on('disconnect', () => {
-      userDisconnect(socket);
+  io.on('connection', async (socket) => {
+    await newUserConnection(socket);
+
+    socket.on('disconnecting', async () => {
+      await userDisconnect(socket);
     });
-    socket.on('clientRequest', async (clientRequest) => {
-      try {
-        const response = await serverResponse(socket, clientRequest);
-        const user = await User.findOne({ userSocketId: socket.id }).exec();
-        if (response.name === 'Chat bot') {
-          io.to(user.defaultRoom).emit('serverResponse', response);
-        } else {
-          io.to(user.defaultRoom)
-            .to(user.additionalRoom)
-            .emit('serverResponse', response);
-        }
-      } catch (err) {
-        console.log(err);
-      }
+
+    socket.on('message', async (message) => {
+      await sendMessage(socket, message);
+    });
+
+    socket.on('joinToRoom', async (message) => {
+      await joinToRoom(socket, message);
+    });
+
+    socket.on('leaveRoom', async () => {
+      await leaveRoom(socket);
+    });
+
+    socket.on('changeName', async (message) => {
+      await changeName(socket, message);
     });
   });
 };

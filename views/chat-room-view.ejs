@@ -9,35 +9,47 @@
   </div>
   <div class="row d-flex justify-content-center">
     <div
-      id="messages-wrapper"
-      class="col col-sm-8 col-md-8 col-lg-7 col-xl-7 col-xxl-7 p-3"
-    ></div>
+      class="col col-sm-8 col-md-8 col-lg-7 col-xl-7 col-xxl-7 p-3 messages-wrapper"
+    >
+      <!-- Messages-->
+    </div>
   </div>
   <div class="row d-flex justify-content-center">
     <div
       class="col col-sm-8 col-md-8 col-lg-7 col-xl-7 col-xxl-7 p-3 text-center"
     >
-      <div class="row">
-        <div class="col p-3">
-          <form action="">
-            <div class="input-group">
-              <span class="input-group-text" id="basic-addon1">></span>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Username"
-                aria-label="Username"
-                aria-describedby="basic-addon1"
-              />
+      <form class="send-message" action="">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <button
+              class="btn btn-outline-secondary dropdown-toggle btn-current-value"
+              type="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Message
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item join-to-room">Join to room</a>
+              <a class="dropdown-item leave-room">Leave room</a>
+              <a class="dropdown-item change-name">Change name</a>
             </div>
-            <!-- <input type="text" /> -->
-            <button>Submit</button>
-          </form>
+          </div>
+          <input
+            class="form-control input-message"
+            type="text"
+            placeholder="Type something..."
+            aria-label=""
+            aria-describedby="basic-addon1"
+          />
+          <button class="btn btn-outline-secondary" type="submit">Send</button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>
+<script src="javascripts/website-utilities.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="javascripts/socket-io-client.js"></script>
 <%- include('templates/footer-view') -%>
