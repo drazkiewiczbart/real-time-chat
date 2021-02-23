@@ -5,7 +5,6 @@ module.exports = (mongoose) => {
 
   const roomSchema = new Schema({
     name: { type: String },
-    owner: { type: String },
     users: [],
   });
 

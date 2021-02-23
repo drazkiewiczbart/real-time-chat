@@ -100,3 +100,7 @@ socket.on('serverResponse', (serverResponse) => {
 
   scrollToLastMessage();
 });
+
+socket.on('usersInRoom', (usersInRoom) => {
+  console.log(usersInRoom);
+});

@@ -1,43 +1,46 @@
 const moment = require('moment');
 const mongoose = require('mongoose');
-const User = mongoose.model('Users');
 const Room = mongoose.model('Rooms');
 
 const userDisconnect = async (socket) => {
-  const now = moment();
-  const date = now.format('YYYY-MM-DD');
-  const time = now.format('HH:mm:ss');
-  const response = {
+  const session = socket.request.session;
+  const serverResponse = {
     from: 'Server',
-    date,
-    time,
+    message: '',
+    date: moment().format('YYYY-MM-DD'),
+    time: moment().format('HH:mm:ss'),
   };
 
-  try {
-    const user = await User.findOne({ userSocketId: socket.id }).exec();
-    const userName = user.name;
-    const { additionalRoom } = user;
-    if (additionalRoom) {
-      const room = await Room.findOne({ name: additionalRoom });
-      const currentUserInRoom = room.users.filter((el) => el !== userName);
-      const numberUsersInRoom = currentUserInRoom.length;
-      if (numberUsersInRoom === 0) {
-        await Room.deleteOne({ name: additionalRoom });
-      } else {
-        room.users = currentUserInRoom;
-        room.save();
-      }
-    }
-    await User.deleteOne({ userSocketId: socket.id }).exec();
+  if (!session.userData.additionalRoom) {
+    return;
+  }
 
-    response.message = `${userName} disconnected.`;
-    if (additionalRoom) {
-      socket.to(additionalRoom).emit('serverResponse', response);
+  try {
+    const room = await Room.findOne({
+      name: session.userData.additionalRoom,
+    });
+
+    room.users = room.users.splice(
+      room.users.indexOf(session.userData.name),
+      1,
+    );
+
+    if (room.users.length === 0) {
+      await Room.deleteOne({ name: session.userData.additionalRoom });
+      return;
     }
-    socket.disconnect();
+
+    await room.save();
+    session.userData.additionalRoom = '';
+    session.save();
+
+    serverResponse.message = `${session.userData.name} disconnected.`;
+    socket
+      .to(session.userData.additionalRoom)
+      .emit('serverResponse', serverResponse);
   } catch (err) {
-    response.message = 'We have a problem, please try again later.';
-    socket.emit('serverResponse', response);
+    serverResponse.message = 'We have a problem, please try again later.';
+    socket.emit('serverResponse', serverResponse);
     console.log(err);
   }
 };

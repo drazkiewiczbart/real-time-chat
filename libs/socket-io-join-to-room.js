@@ -1,64 +1,73 @@
 const moment = require('moment');
 const mongoose = require('mongoose');
-const User = mongoose.model('Users');
 const Room = mongoose.model('Rooms');
 const { createRoom } = require('./socket-io-create-room');
 
-const joinToRoom = async (socket, message) => {
-  const now = moment();
-  const date = now.format('YYYY-MM-DD');
-  const time = now.format('HH:mm:ss');
-  const response = {
+const joinToRoom = async (socket, roomName) => {
+  const session = socket.request.session;
+  const serverResponse = {
     from: 'Server',
-    date,
-    time,
+    message: '',
+    date: moment().format('YYYY-MM-DD'),
+    time: moment().format('HH:mm:ss'),
   };
 
-  const normalizeMessage = message.trim();
-  if (!normalizeMessage) {
-    response.message = 'You need pass your room name.';
-    socket.emit('serverResponse', response);
+  if (!roomName) {
+    serverResponse.message = 'You need pass your room name.';
+    socket.emit('serverResponse', serverResponse);
+    return;
+  }
+
+  if (session.userData.additionalRoom === roomName) {
+    serverResponse.message = 'You are current in this room.';
+    socket.emit('serverResponse', serverResponse);
+    return;
+  }
+
+  if (session.userData.additionalRoom) {
+    serverResponse.message = 'Before join to room you must leave current room.';
+    socket.emit('serverResponse', serverResponse);
     return;
   }
 
   try {
-    const user = await User.findOne({ userSocketId: socket.id }).exec();
-    const userName = user.name;
-    const { additionalRoom } = user;
-    if (userName === 'New user') {
-      response.message = 'Before join to room you must set name.';
-      socket.emit('serverResponse', response);
-      return;
-    }
-    if (additionalRoom === normalizeMessage) {
-      response.message = 'You are current in this room.';
-      socket.emit('serverResponse', response);
-      return;
-    }
-    const isRoomInDatabase = await Room.findOne({
-      name: normalizeMessage,
-    }).exec();
-    if (!isRoomInDatabase) {
-      if (!(await createRoom(socket, normalizeMessage))) {
+    const room = await Room.findOne({
+      name: session.userData.additionalRoom,
+    });
+
+    if (!room) {
+      if (!(await createRoom(session, roomName))) {
         throw Error;
       }
-      user.additionalRoom = normalizeMessage;
-      await user.save();
-    } else {
-      isRoomInDatabase.users.push(userName);
-      await isRoomInDatabase.save();
-      user.additionalRoom = normalizeMessage;
-      await user.save();
+      socket.join(roomName);
+      session.userData.additionalRoom = roomName;
+      session.save();
+      serverResponse.message = `You are joind to ${roomName} room.`;
+      socket.emit('serverResponse', serverResponse);
+      return;
     }
-    socket.join(normalizeMessage);
 
-    response.message = `${userName} join to ${normalizeMessage} room.`;
-    socket.to(normalizeMessage).emit('serverResponse', response);
-    response.message = `You are join to ${normalizeMessage} room.`;
-    socket.emit('serverResponse', response);
+    if (room.users.includes(session.userData.name)) {
+      serverResponse.message = `User with this name is already in this room. Choose different name`;
+      socket.emit('serverResponse', serverResponse);
+      return;
+    }
+
+    room.users.push(session.userData.name);
+    await room.save();
+    socket.join(roomName);
+    session.userData.additionalRoom = roomName;
+    session.save();
+
+    serverResponse.message = `${session.userData.name} join to ${roomName} room.`;
+    socket
+      .to(session.userData.additionalRoom)
+      .emit('serverResponse', serverResponse);
+    serverResponse.message = `You are joind to ${roomName} room.`;
+    socket.emit('serverResponse', serverResponse);
   } catch (err) {
-    response.message = 'We have a problem, please try again later';
-    socket.emit('serverResponse', response);
+    serverResponse.message = 'We have a problem, please try again later';
+    socket.emit('serverResponse', serverResponse);
     console.log(err);
   }
 };

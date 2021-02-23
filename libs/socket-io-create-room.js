@@ -1,17 +1,18 @@
 const mongoose = require('mongoose');
-const User = mongoose.model('Users');
 const Room = mongoose.model('Rooms');
 
-const createRoom = async (socket, message) => {
+const createRoom = async (session, roomName) => {
   try {
-    const user = await User.findOne({ userSocketId: socket.id }).exec();
-    const userName = user.name;
     const room = new Room({
-      name: message,
-      owner: userName,
-      users: [userName],
+      name: roomName,
+      owner: session.userData.name,
+      users: [session.userData.name],
     });
     await room.save();
+
+    session.userData.additionalRoom = roomName;
+    session.save();
+
     return true;
   } catch (err) {
     console.log(err);

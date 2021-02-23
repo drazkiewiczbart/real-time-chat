@@ -3,9 +3,9 @@ const http = require('http');
 const express = require('express');
 const app = express();
 const server = http.createServer(app);
-// const expressSession = require('express-session');
+const expressSession = require('express-session');
 const mongoose = require('mongoose');
-// const MongoStore = require('connect-mongo')(expressSession);
+const MongoStore = require('connect-mongo')(expressSession);
 require('../models/user-model')(mongoose);
 require('../models/room-model')(mongoose);
 const io = require('socket.io')(server);
@@ -19,7 +19,7 @@ const {
   dbName,
   dbUser,
   dbUserPwd,
-  // sessionSecret,
+  sessionSecret,
 } = require('./config');
 
 // App set
@@ -28,20 +28,21 @@ app.set('views', path.join(__dirname, '../views'));
 
 // App use
 app.use(express.static(path.join(__dirname, '../public')));
-// const session = expressSession({
-//   secret: sessionSecret,
-//   resave: false,
-//   saveUninitialized: true,
-//   httpOnly: true,
-//   cookie: {
-//     secure: false,
-//   },
-//   store: new MongoStore({ mongooseConnection: mongoose.connection }),
-// });
-// app.use(session);
-// io.use((socket, next) => {
-//   session(socket.request, {}, next);
-// });
+const session = expressSession({
+  secret: sessionSecret,
+  resave: false,
+  saveUninitialized: true,
+  httpOnly: true,
+  cookie: {
+    secure: false,
+    maxAge: 1000 * 60 * 60 * 24 * 1,
+  },
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+});
+app.use(session);
+io.use((socket, next) => {
+  session(socket.request, {}, next);
+});
 
 // Routers
 require('../routers/chat-room-router')(app);

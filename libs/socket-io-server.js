@@ -17,16 +17,16 @@ module.exports = (io) => {
       await sendMessage(socket, message);
     });
 
-    socket.on('joinToRoom', async (message) => {
-      await joinToRoom(socket, message);
+    socket.on('joinToRoom', async (roomName) => {
+      await joinToRoom(socket, roomName);
     });
 
     socket.on('leaveRoom', async () => {
       await leaveRoom(socket);
     });
 
-    socket.on('changeName', async (message) => {
-      await changeName(socket, message);
+    socket.on('changeName', async (userName) => {
+      await changeName(socket, userName);
     });
   });
 };
