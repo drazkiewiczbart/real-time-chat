@@ -9,5 +9,4 @@ module.exports = {
   dbName: process.env.DB_NAME,
   dbUser: process.env.DB_USER,
   dbUserPwd: process.env.DB_USER_PWD,
-  sessionSecret: process.env.SESSION_SECRET,
 };
