@@ -1,6 +1,8 @@
 const moment = require('moment');
+const { dbName } = require('../../config');
 
-const sendMessage = async (socket, connection, message) => {
+const sendMessage = async (socket, mongoConnection, message) => {
+  // Create response object
   const serverResponse = {
     from: null,
     message,
@@ -9,24 +11,35 @@ const sendMessage = async (socket, connection, message) => {
   };
 
   try {
-    const user = await connection
+    // Get user from database
+    const { name: userName, roomId: userRoomId } = await mongoConnection
+      .db(dbName)
       .collection('users')
       .findOne({ _id: socket.id });
 
-    serverResponse.from = user.name;
+    // Set response author
+    serverResponse.from = userName;
 
-    if (user.roomId) {
-      const room = await connection
+    // If user in room
+    if (userRoomId) {
+      // Get current user room from database
+      const { name: roomName } = await mongoConnection
+        .db(dbName)
         .collection('rooms')
-        .findOne({ _id: user.roomId });
+        .findOne({ _id: userRoomId });
 
-      socket.to(room.name).emit('serverResponse', serverResponse);
+      // Emit message
+      socket.to(roomName).emit('serverResponse', serverResponse);
     }
+
+    // Emit message
     socket.emit('serverResponse', serverResponse);
   } catch (err) {
-    //TODO handle logs, delete consol.log
+    // Set and emit message
     serverResponse.message = 'We have a problem, please try again later.';
     socket.emit('serverResponse', serverResponse);
+    //TODO handle logs, delete consol.log
+    console.log(err);
   }
 };
 

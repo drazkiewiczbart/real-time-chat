@@ -1,45 +1,77 @@
 const moment = require('moment');
+const { dbName } = require('../../config');
 
-const userDisconnect = async (socket, connection) => {
+const userDisconnect = async (socket, mongoConnection) => {
+  // Create response object
   const serverResponse = {
     from: 'Server',
-    message: '',
+    message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
   };
 
   try {
-    const user = await connection
+    // Get user from database
+    const {
+      _id: userId,
+      name: userName,
+      roomId: userRoomId,
+    } = await mongoConnection
+      .db(dbName)
       .collection('users')
       .findOne({ _id: socket.id });
 
-    if (!user.roomId) {
-      await connection.collection('users').deleteOne({ _id: user._id });
+    // If user isn't in room, delete user from database and return
+    if (!userRoomId) {
+      await mongoConnection
+        .db(dbName)
+        .collection('users')
+        .deleteOne({ _id: userId });
       return;
     }
 
-    await connection.collection('users').deleteOne({ _id: user.id });
+    // If user was in room, delete user form database
+    await mongoConnection
+      .db(dbName)
+      .collection('users')
+      .deleteOne({ _id: userId });
 
-    await connection
+    // Remove user from room in database
+    await mongoConnection
+      .db(dbName)
       .collection('rooms')
       .updateOne(
-        { _id: user.roomId },
-        { $pull: { connectedUsers: { socketId: user._id } } },
+        { _id: userRoomId },
+        { $pull: { connectedUsers: { socketId: userId } } },
       );
 
-    const room = await connection
+    // Get last user room from database
+    const {
+      name: roomName,
+      connectedUsers: usersInRoom,
+    } = await mongoConnection
+      .db(dbName)
       .collection('rooms')
-      .findOne({ _id: user.roomId });
+      .findOne({ _id: userRoomId });
 
-    if (room.connectedUsers.length === 0) {
-      await connection.collection('rooms').deleteOne({ _id: user.roomId });
+    // Delete room if empty
+    if (usersInRoom.length === 0) {
+      await mongoConnection
+        .db(dbName)
+        .collection('rooms')
+        .deleteOne({ _id: userRoomId });
       return;
     }
 
-    serverResponse.message = `${user.name} disconnected.`;
-    socket.to(room.name).emit('serverResponse', serverResponse);
+    // Set and emit message
+    serverResponse.message = `${userName} disconnected.`;
+    socket.to(roomName).emit('serverResponse', serverResponse);
   } catch (err) {
+    // Set and emit message
+    serverResponse.message = 'We have a problem, please try again later.';
+    socket.emit('serverResponse', serverResponse);
     //TODO handle logs, delete consol.log
+    console.log(err);
   }
 };
 

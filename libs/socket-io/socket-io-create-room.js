@@ -1,14 +1,19 @@
-const createRoom = async (socket, connection, roomName) => {
+const { dbName } = require('../../config');
+
+const createRoom = async (socket, mongoConnection, roomName) => {
   try {
-    const user = await connection
+    const { _id: userId, name: userName } = await mongoConnection
+      .db(dbName)
       .collection('users')
       .findOne({ _id: socket.id });
 
-    await connection.collection('rooms').insertOne({
-      name: roomName,
-      connectedUsers: [{ socketId: user._id, name: user.name }],
-    });
-
+    await mongoConnection
+      .db(dbName)
+      .collection('rooms')
+      .insertOne({
+        name: roomName,
+        connectedUsers: [{ socketId: userId, name: userName }],
+      });
     return true;
   } catch (err) {
     //TODO handle logs

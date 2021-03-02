@@ -1,6 +1,8 @@
 const moment = require('moment');
+const { dbName } = require('../../config');
 
-const userConnection = async (socket, connection) => {
+const userConnection = async (socket, mongoConnection) => {
+  // Create response object
   const serverResponse = {
     from: 'Server',
     message: 'Hello new user.',
@@ -9,16 +11,21 @@ const userConnection = async (socket, connection) => {
   };
 
   try {
-    await connection.collection('users').insertOne({
+    // Create new user in database
+    await mongoConnection.db(dbName).collection('users').insertOne({
       _id: socket.id,
       name: 'New user',
       roomId: null,
     });
-  } catch (err) {
-    //TODO handle logs, delete consol.log
-    serverResponse.message = 'We have a problem, please try again later.';
-  } finally {
+
+    // Emit message
     socket.emit('serverResponse', serverResponse);
+  } catch (err) {
+    // Set and emit message
+    serverResponse.message = 'We have a problem, please try again later.';
+    socket.emit('serverResponse', serverResponse);
+    //TODO handle logs, delete consol.log
+    console.log(err);
   }
 };
 

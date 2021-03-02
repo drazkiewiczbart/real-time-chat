@@ -1,97 +1,135 @@
 const moment = require('moment');
-const { createRoom } = require('./socket-io-create-room');
+const { dbName } = require('../../config');
 
-const joinToRoom = async (socket, connection, roomName) => {
+const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
+  // Create response object
   const serverResponse = {
     from: 'Server',
-    message: '',
+    message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
   };
 
-  if (!roomName) {
+  // Return if user no pass room name
+  if (joinRoomName === '') {
     serverResponse.message = 'You need pass your room name.';
     socket.emit('serverResponse', serverResponse);
     return;
   }
 
   try {
-    const user = await connection
+    // Get user from database
+    const {
+      _id: userId,
+      name: userName,
+      roomId: userRoomId,
+    } = await mongoConnection
+      .db(dbName)
       .collection('users')
       .findOne({ _id: socket.id });
 
-    if (user.roomId) {
+    // Return if user is current in room
+    if (userRoomId) {
       serverResponse.message =
         'Before join to room you must leave current room.';
       socket.emit('serverResponse', serverResponse);
       return;
     }
 
-    const isRoomExists = await connection
+    // If user isn't current in room, check if room exists
+    const isRoomExists = await mongoConnection
+      .db(dbName)
       .collection('rooms')
-      .findOne({ name: roomName });
+      .findOne({ name: joinRoomName });
 
+    // Create room if no exists
     if (!isRoomExists) {
-      if (!(await createRoom(socket, connection, roomName))) {
-        throw Error;
-      }
+      await mongoConnection.db(dbName).collection('rooms').insertOne({
+        name: joinRoomName,
+        connectedUsers: [],
+      });
 
-      const room = await connection
+      // Get created room from database
+      const { _id: roomId } = await mongoConnection
+        .db(dbName)
         .collection('rooms')
-        .findOne({ name: roomName });
+        .findOne({ name: joinRoomName });
 
-      await connection
+      // Add user to room in database
+      await mongoConnection
+        .db(dbName)
+        .collection('rooms')
+        .updateOne(
+          { _id: roomId },
+          { $push: { connectedUsers: { socketId: userId, name: userName } } },
+        );
+
+      // Add room to user in database
+      await mongoConnection
+        .db(dbName)
         .collection('users')
-        .updateOne({ _id: socket.id }, { $set: { roomId: room._id } });
+        .updateOne({ _id: userId }, { $set: { roomId } });
 
-      socket.join(roomName);
+      // Join to room
+      socket.join(joinRoomName);
 
-      serverResponse.message = `You are joind to ${roomName} room.`;
+      // Set and emit message
+      serverResponse.message = `You are joind to ${joinRoomName} room.`;
       socket.emit('serverResponse', serverResponse);
       return;
     }
 
-    const isNameUsed = await connection.collection('rooms').findOne(
-      {
-        name: roomName,
-      },
-      {
-        $elemMatch: { connectedUsers: { name: user.name } },
-      },
-    );
-    console.log(isNameUsed);
-    if (isNameUsed) {
+    // If room exists, check if name in exists room is used
+    const isUserNameUsed = await mongoConnection
+      .db(dbName)
+      .collection('rooms')
+      .findOne({
+        name: joinRoomName,
+        connectedUsers: { $elemMatch: { name: userName } },
+      });
+
+    // Return if name is used
+    if (isUserNameUsed) {
       serverResponse.message = `User with this name is already in this room. Choose different name`;
       socket.emit('serverResponse', serverResponse);
       return;
     }
 
-    const room = await connection
+    // Get room from database
+    const { _id: roomId, name: roomName } = await mongoConnection
+      .db(dbName)
       .collection('rooms')
-      .findOne({ name: roomName });
+      .findOne({ name: joinRoomName });
 
-    await connection
-      .collection('users')
-      .updateOne({ _id: socket.id }, { $set: { roomId: room._id } });
-
-    await connection
+    // Add user to room in database
+    await mongoConnection
+      .db(dbName)
       .collection('rooms')
       .updateOne(
         { name: roomName },
-        { $push: { connectedUsers: { socketId: user._id, name: user.name } } },
+        { $push: { connectedUsers: { socketId: userId, name: userName } } },
       );
 
+    // Add room to user in database
+    await mongoConnection
+      .db(dbName)
+      .collection('users')
+      .updateOne({ _id: userId }, { $set: { roomId } });
+
+    // Join to room
     socket.join(roomName);
 
-    serverResponse.message = `${user.name} join to ${roomName} room.`;
+    // Set and emit message
+    serverResponse.message = `${userName} join to ${roomName} room.`;
     socket.to(roomName).emit('serverResponse', serverResponse);
     serverResponse.message = `You are joind to ${roomName} room.`;
     socket.emit('serverResponse', serverResponse);
   } catch (err) {
-    //TODO handle logs
-    console.log(err);
+    // Set and emit message
     serverResponse.message = 'We have a problem, please try again later';
     socket.emit('serverResponse', serverResponse);
+    //TODO handle logs
+    console.log(err);
   }
 };
 

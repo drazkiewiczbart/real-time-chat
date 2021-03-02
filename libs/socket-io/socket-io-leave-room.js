@@ -1,53 +1,79 @@
 const moment = require('moment');
+const { dbName } = require('../../config');
 
-const leaveRoom = async (socket, connection) => {
+const leaveRoom = async (socket, mongoConnection) => {
+  // Create response object
   const serverResponse = {
     from: 'Server',
-    message: '',
+    message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
   };
 
   try {
-    const user = await connection
+    // Get user from database
+    const {
+      _id: userId,
+      name: userName,
+      roomId: userRoomId,
+    } = await mongoConnection
+      .db(dbName)
       .collection('users')
       .findOne({ _id: socket.id });
 
-    if (!user.roomId) {
+    // Return if user isn't current in room
+    if (!userRoomId) {
       serverResponse.message = `You cannot leave default room.`;
       socket.emit('serverResponse', serverResponse);
       return;
     }
 
-    await connection
+    // If user is in room, remove user from room in database
+    await mongoConnection
+      .db(dbName)
       .collection('rooms')
       .updateOne(
-        { _id: user.roomId },
-        { $pull: { connectedUsers: { socketId: user._id } } },
+        { _id: userRoomId },
+        { $pull: { connectedUsers: { socketId: userId } } },
       );
 
-    const room = await connection
+    // Get room from database
+    const {
+      name: roomName,
+      connectedUsers: usersInRoom,
+    } = await mongoConnection
+      .db(dbName)
       .collection('rooms')
-      .findOne({ _id: user.roomId });
+      .findOne({ _id: userRoomId });
 
-    if (room.connectedUsers.length === 0) {
-      await connection.collection('rooms').deleteOne({ _id: user.roomId });
+    // Delete room if empty
+    if (usersInRoom.length === 0) {
+      await mongoConnection
+        .db(dbName)
+        .collection('rooms')
+        .deleteOne({ _id: userRoomId });
     }
 
-    await connection
+    // Update user current room in database
+    await mongoConnection
+      .db(dbName)
       .collection('users')
-      .updateOne({ _id: socket.id }, { $set: { roomId: '' } });
+      .updateOne({ _id: userId }, { $set: { roomId: null } });
 
-    socket.leave(room.name);
+    // Leave room
+    socket.leave(roomName);
 
-    serverResponse.message = `${user.name} leave room.`;
-    socket.to(room.name).emit('serverResponse', serverResponse);
-    serverResponse.message = `You are leaved ${room.name} room.`;
+    // Set and emit message
+    serverResponse.message = `${userName} leave room.`;
+    socket.to(roomName).emit('serverResponse', serverResponse);
+    serverResponse.message = `You are leaved ${roomName} room.`;
     socket.emit('serverResponse', serverResponse);
   } catch (err) {
-    //TODO handle logs, delete consol.log
+    // Set and emit message
     serverResponse.message = 'We have a problem, please try again later.';
     socket.emit('serverResponse', serverResponse);
+    //TODO handle logs, delete consol.log
+    console.log(err);
   }
 };
 

@@ -4,30 +4,30 @@ const { sendMessage } = require('./socket-io-send-message');
 const { joinToRoom } = require('./socket-io-join-to-room');
 const { leaveRoom } = require('./socket-io-leave-room');
 const { changeName } = require('./socket-io-change-name');
-const { getConnection } = require('../mongo/mongo-connection');
+const { getMongoConnection } = require('../mongo/mongo-connection');
 
 module.exports = (io) => {
   io.on('connection', async (socket) => {
-    await userConnection(socket, getConnection());
+    await userConnection(socket, getMongoConnection());
 
     socket.on('disconnecting', async () => {
-      await userDisconnect(socket, getConnection());
+      await userDisconnect(socket, getMongoConnection());
     });
 
     socket.on('message', async (message) => {
-      await sendMessage(socket, getConnection(), message);
+      await sendMessage(socket, getMongoConnection(), message);
     });
 
-    socket.on('joinToRoom', async (roomName) => {
-      await joinToRoom(socket, getConnection(), roomName);
+    socket.on('joinToRoom', async (joinRoomName) => {
+      await joinToRoom(socket, getMongoConnection(), joinRoomName);
     });
 
     socket.on('leaveRoom', async () => {
-      await leaveRoom(socket, getConnection());
+      await leaveRoom(socket, getMongoConnection());
     });
 
     socket.on('changeName', async (newUserName) => {
-      await changeName(socket, getConnection(), newUserName);
+      await changeName(socket, getMongoConnection(), newUserName);
     });
   });
 };
