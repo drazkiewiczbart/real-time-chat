@@ -10,7 +10,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
     time: moment().format('HH:mm:ss'),
   };
 
-  // Return if user no pass room name
+  // Return if the user has not provided a room name
   if (joinRoomName === '') {
     serverResponse.message = 'You need pass your room name.';
     socket.emit('serverResponse', serverResponse);
@@ -73,7 +73,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
       // Join to room
       socket.join(joinRoomName);
 
-      // Set and emit message
+      // Set and emit message, return
       serverResponse.message = `You are joind to ${joinRoomName} room.`;
       socket.emit('serverResponse', serverResponse);
       return;
@@ -85,7 +85,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
       .collection('rooms')
       .findOne({
         name: joinRoomName,
-        connectedUsers: { $elemMatch: { name: userName } },
+        'connectedUsers.name': userName,
       });
 
     // Return if name is used

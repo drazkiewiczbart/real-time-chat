@@ -21,7 +21,7 @@ const userDisconnect = async (socket, mongoConnection) => {
       .collection('users')
       .findOne({ _id: socket.id });
 
-    // If user isn't in room, delete user from database and return
+    // If user isn't in room, delete user from database, return
     if (!userRoomId) {
       await mongoConnection
         .db(dbName)
@@ -54,7 +54,7 @@ const userDisconnect = async (socket, mongoConnection) => {
       .collection('rooms')
       .findOne({ _id: userRoomId });
 
-    // Delete room if empty
+    // Delete room if empty, return
     if (usersInRoom.length === 0) {
       await mongoConnection
         .db(dbName)

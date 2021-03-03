@@ -10,7 +10,7 @@ const changeName = async (socket, mongoConnection, newUserName) => {
     time: moment().format('HH:mm:ss'),
   };
 
-  // Return if user no pass name
+  // Return if the user has not provided a name
   if (newUserName === '') {
     serverResponse.message = 'You need pass your name.';
     socket.emit('serverResponse', serverResponse);
@@ -36,7 +36,7 @@ const changeName = async (socket, mongoConnection, newUserName) => {
         .collection('rooms')
         .findOne({
           _id: userRoomId,
-          connectedUsers: { $elemMatch: { name: newUserName } },
+          'connectedUsers.name': newUserName,
         });
 
       // Return if name is used
@@ -59,7 +59,7 @@ const changeName = async (socket, mongoConnection, newUserName) => {
         .updateOne(
           {
             _id: userRoomId,
-            connectedUsers: { $elemMatch: { name: userName } },
+            'connectedUsers.name': userName,
           },
           { $set: { 'connectedUsers.$.name': newUserName } },
         );
@@ -70,7 +70,7 @@ const changeName = async (socket, mongoConnection, newUserName) => {
         .collection('rooms')
         .findOne({ _id: userRoomId });
 
-      // Set and emit message
+      // Set and emit message, return
       serverResponse.message = `${userName} changed name. Current name is ${newUserName}.`;
       socket.to(roomName).emit('serverResponse', serverResponse);
       serverResponse.message = `Your name is changed. Current name is ${newUserName}.`;
