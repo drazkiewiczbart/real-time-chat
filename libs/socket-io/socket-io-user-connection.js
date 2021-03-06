@@ -8,6 +8,9 @@ const userConnection = async (socket, mongoConnection) => {
     message: 'Hello new user.',
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
+    request: 'User connection',
+    requestMessage: null,
+    isRequestSuccess: null,
   };
 
   try {
@@ -19,10 +22,12 @@ const userConnection = async (socket, mongoConnection) => {
     });
 
     // Emit message
+    serverResponse.isRequestSuccess = true;
     socket.emit('serverResponse', serverResponse);
   } catch (err) {
     // Set and emit message
     serverResponse.message = 'We have a problem, please try again later.';
+    serverResponse.isRequestSuccess = false;
     socket.emit('serverResponse', serverResponse);
     //TODO handle logs, delete consol.log
     console.log(err);

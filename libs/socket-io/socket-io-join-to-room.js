@@ -8,11 +8,15 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
     message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
+    request: 'Join to room',
+    requestMessage: joinRoomName,
+    isRequestSuccess: null,
   };
 
   // Return if the user has not provided a room name
   if (joinRoomName === '') {
     serverResponse.message = 'You need pass your room name.';
+    serverResponse.isRequestSuccess = false;
     socket.emit('serverResponse', serverResponse);
     return;
   }
@@ -32,6 +36,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
     if (userRoomId) {
       serverResponse.message =
         'Before join to room you must leave current room.';
+      serverResponse.isRequestSuccess = false;
       socket.emit('serverResponse', serverResponse);
       return;
     }
@@ -75,6 +80,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
 
       // Set and emit message, return
       serverResponse.message = `You are joind to ${joinRoomName} room.`;
+      serverResponse.isRequestSuccess = true;
       socket.emit('serverResponse', serverResponse);
       return;
     }
@@ -91,6 +97,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
     // Return if name is used
     if (isUserNameUsed) {
       serverResponse.message = `User with this name is already in this room. Choose different name`;
+      serverResponse.isRequestSuccess = false;
       socket.emit('serverResponse', serverResponse);
       return;
     }
@@ -121,12 +128,14 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
 
     // Set and emit message
     serverResponse.message = `${userName} join to ${roomName} room.`;
+    serverResponse.isRequestSuccess = true;
     socket.to(roomName).emit('serverResponse', serverResponse);
     serverResponse.message = `You are joind to ${roomName} room.`;
     socket.emit('serverResponse', serverResponse);
   } catch (err) {
     // Set and emit message
     serverResponse.message = 'We have a problem, please try again later';
+    serverResponse.isRequestSuccess = false;
     socket.emit('serverResponse', serverResponse);
     //TODO handle logs
     console.log(err);

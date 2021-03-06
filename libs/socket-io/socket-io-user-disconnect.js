@@ -8,6 +8,9 @@ const userDisconnect = async (socket, mongoConnection) => {
     message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
+    request: 'User disconnect',
+    requestMessage: null,
+    isRequestSuccess: null,
   };
 
   try {
@@ -65,10 +68,12 @@ const userDisconnect = async (socket, mongoConnection) => {
 
     // Set and emit message
     serverResponse.message = `${userName} disconnected.`;
+    serverResponse.isRequestSuccess = true;
     socket.to(roomName).emit('serverResponse', serverResponse);
   } catch (err) {
     // Set and emit message
     serverResponse.message = 'We have a problem, please try again later.';
+    serverResponse.isRequestSuccess = false;
     socket.emit('serverResponse', serverResponse);
     //TODO handle logs, delete consol.log
     console.log(err);

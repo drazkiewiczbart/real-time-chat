@@ -1,109 +1,139 @@
-<%- include('templates/header-view') -%>
-<div class="container">
-  <div class="row d-flex justify-content-center">
-    <div
-      class="col col-sm-8 col-md-8 col-lg-7 col-xl-7 col-xxl-7 p-3 text-center"
-    >
-      <h1>Chat room</h1>
-    </div>
-  </div>
-  <div class="row d-flex justify-content-center">
-    <div
-      class="col col-sm-8 col-md-8 col-lg-7 col-xl-7 col-xxl-7 p-3 messages-wrapper"
-    >
-      <!-- Messages-->
-    </div>
-  </div>
-  <div class="row d-flex justify-content-center">
-    <div
-      class="col col-sm-8 col-md-8 col-lg-7 col-xl-7 col-xxl-7 p-3 text-center"
-    >
-      <form class="send-message" action="">
-        <div class="row">
-          <div class="col-1">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <button
-                  class="btn btn-outline-secondary dropdown-toggle btn-current-value"
-                  type="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Message
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item join-to-room">Join to room</a>
-                  <a class="dropdown-item leave-room">Leave room</a>
-                  <a class="dropdown-item change-name">Change name</a>
-                </div>
-              </div>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="others/font-awesome/css/all.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <title>Real-time chat</title>
+  </head>
+  <body>
+    <div class="container main-wrapper">
+      <div class="row header">
+        <div class="col col-md-10 header-content">
+          <h1 id="header-content-title" class="header-content-title">
+            Messages
+          </h1>
+        </div>
+      </div>
+      <div class="row menu">
+        <div class="col col-md-9 menu-content">
+          <i
+            id="menu-content-messages-icon"
+            class="fas fa-comments menu-content-icon menu-content-icon--active"
+          ></i>
+          <i
+            id="menu-content-settings-icon"
+            class="fas fa-bars menu-content-icon"
+          ></i>
+        </div>
+      </div>
+      <div id="messages" class="row messages">
+        <div id="messages-content" class="col col-md-9 messages-content"></div>
+      </div>
+      <div id="settings" class="row settings settings--hide">
+        <div class="col settings-content">
+          <div class="col-8 settings-content-data">
+            <p class="settings-content-name">
+              <span class="settings-content-name--description"
+                >Your current name</span
+              ><br /><span id="settings-content-name">New user</span>
+            </p>
+            <p class="settings-content-room">
+              <span class="settings-content-room--description"
+                >Your current room</span
+              ><br /><span id="settings-content-room">Default</span>
+            </p>
+          </div>
+          <div class="col-8 settings-content-actions">
+            <p class="settings-content-actions-title">Actions</p>
+            <div class="input-group settings-content-actions-input">
+              <input
+                id="settings-content-actions-input-text-name"
+                type="text"
+                class="form-control settings-content-actions-input-text"
+                placeholder="Type your new name"
+              />
+              <button
+                id="settings-content-actions-input-button-name"
+                class="btn settings-content-actions-input-button-join"
+                type="submit"
+              >
+                Change
+              </button>
             </div>
-          </div>
-          <div class="col">
-            <input
-              class="form-control input-message"
-              type="text"
-              placeholder="Type something..."
-              aria-label=""
-              aria-describedby="basic-addon1"
-            />
-          </div>
-          <div class="col-1">
-            <button class="btn btn-outline-secondary" type="submit">
-              Send
+            <div class="input-group settings-content-actions-input">
+              <input
+                id="settings-content-actions-input-text"
+                type="text"
+                class="form-control settings-content-actions-input-text"
+                placeholder="Join to room"
+              />
+              <button
+                id="settings-content-actions-input-button-join"
+                class="btn settings-content-actions-input-button-join"
+                type="submit"
+              >
+                Join
+              </button>
+            </div>
+            <button
+              id="settings-content-actions-input-button-leave"
+              type="button"
+              class="btn settings-content-actions-input-button-leave"
+            >
+              Leave room
             </button>
           </div>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="row d-flex justify-content-center">
-    <div
-      class="col col-sm-8 col-md-8 col-lg-7 col-xl-7 col-xxl-7 p-3 text-center"
-    >
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link disabled"
-                  href="#"
-                  tabindex="-1"
-                  aria-disabled="true"
-                  >Disabled</a
-                >
-              </li>
-            </ul>
+          <div class="col-8 settings-content-description">
+            <p>
+              Education and portfolio project. Website allows creates users,
+              login to system, updates data and deletes them.
+            </p>
           </div>
         </div>
-      </nav>
+      </div>
+      <div id="footer" class="row footer">
+        <div class="col col-md-9 footer-content">
+          <form id="footer-content-form" class="footer-content-form" action="">
+            <div class="input-group footer-content-form-content">
+              <textarea
+                id="footer-content-form-content-text"
+                class="form-control footer-content-form-content-text"
+                placeholder="Type something"
+                autofocus
+                rows="3"
+              ></textarea>
+              <button
+                class="btn btn-outline-secondary footer-content-form-content-button"
+                type="submit"
+              >
+                <i
+                  class="fas fa-paper-plane footer-content-form-content-button-icon"
+                ></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-<script src="javascripts/website-utilities.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="javascripts/socket-io-client.js"></script>
-<%- include('templates/footer-view') -%>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="javascripts/website-utilities.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

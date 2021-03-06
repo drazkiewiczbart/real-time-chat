@@ -8,7 +8,19 @@ const sendMessage = async (socket, mongoConnection, message) => {
     message,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
+    request: 'Send message',
+    requestMessage: message,
+    isRequestSuccess: null,
   };
+
+  // Return if the user has not provided a name
+  if (message === '') {
+    serverResponse.from = 'Server';
+    serverResponse.message = 'Type something, your message is empty';
+    serverResponse.isRequestSuccess = false;
+    socket.emit('serverResponse', serverResponse);
+    return;
+  }
 
   try {
     // Get user from database
@@ -33,10 +45,12 @@ const sendMessage = async (socket, mongoConnection, message) => {
     }
 
     // Emit message
+    serverResponse.isRequestSuccess = true;
     socket.emit('serverResponse', serverResponse);
   } catch (err) {
     // Set and emit message
     serverResponse.message = 'We have a problem, please try again later.';
+    serverResponse.isRequestSuccess = false;
     socket.emit('serverResponse', serverResponse);
     //TODO handle logs, delete consol.log
     console.log(err);
