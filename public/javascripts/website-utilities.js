@@ -1,4 +1,14 @@
 /*
+ ** Resize window
+ */
+let vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
+window.addEventListener('resize', () => {
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+});
+
+/*
  ** Switch between message and settings window
  */
 $('#menu-content-settings-icon').click(() => {
