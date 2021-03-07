@@ -14,7 +14,7 @@ module.exports = (io) => {
       await userDisconnect(socket, getMongoConnection());
     });
 
-    socket.on('message', async (message) => {
+    socket.on('sendMessage', async (message) => {
       await sendMessage(socket, getMongoConnection(), message);
     });
 

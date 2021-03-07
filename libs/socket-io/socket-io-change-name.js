@@ -1,23 +1,23 @@
 const moment = require('moment');
 const { dbName } = require('../../config');
+const { updateUserInRoomList } = require('./socket-io-users-in-room');
 
 const changeName = async (socket, mongoConnection, newUserName) => {
   // Create response object
-  const serverResponse = {
-    from: 'Chat bot',
+  const response = {
+    target: socket.id,
     message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
-    request: 'Change name',
-    requestMessage: newUserName,
-    isRequestSuccess: null,
+    data: newUserName,
+    status: null,
   };
 
   // Return if the user has not provided a name
   if (newUserName === '') {
-    serverResponse.message = 'You need give name before change.';
-    serverResponse.isRequestSuccess = false;
-    socket.emit('serverResponse', serverResponse);
+    response.message = 'You need give name before change.';
+    response.status = false;
+    socket.emit('changeName', response);
     return;
   }
 
@@ -45,9 +45,9 @@ const changeName = async (socket, mongoConnection, newUserName) => {
 
       // Return if name is used
       if (isUserNameExists) {
-        serverResponse.message = `User with this name is already in this room. Choose different name.`;
-        serverResponse.isRequestSuccess = false;
-        socket.emit('serverResponse', serverResponse);
+        response.message = `User with this name is already in this room. Choose different name.`;
+        response.status = false;
+        socket.emit('changeName', response);
         return;
       }
 
@@ -76,11 +76,14 @@ const changeName = async (socket, mongoConnection, newUserName) => {
         .findOne({ _id: userRoomId });
 
       // Set and emit message, return
-      serverResponse.message = `${userName} changed name. Current name is ${newUserName}.`;
-      serverResponse.isRequestSuccess = true;
-      socket.to(roomName).emit('serverResponse', serverResponse);
-      serverResponse.message = `Your name is changed. Current name is ${newUserName}.`;
-      socket.emit('serverResponse', serverResponse);
+      response.message = `${userName} changed name. Current name is ${newUserName}.`;
+      response.status = true;
+      socket.to(roomName).emit('changeName', response);
+      response.message = `Your name is changed. Current name is ${newUserName}.`;
+      socket.emit('changeName', response);
+
+      // Update users in room list
+      await updateUserInRoomList(socket, mongoConnection);
       return;
     }
 
@@ -91,14 +94,17 @@ const changeName = async (socket, mongoConnection, newUserName) => {
       .updateOne({ _id: userId }, { $set: { name: newUserName } });
 
     // Set and emit message
-    serverResponse.message = `Your name is changed. Current name is ${newUserName}.`;
-    serverResponse.isRequestSuccess = true;
-    socket.emit('serverResponse', serverResponse);
+    response.message = `Your name is changed. Current name is ${newUserName}.`;
+    response.status = true;
+    socket.emit('changeName', response);
+
+    // Update users in room list
+    await updateUserInRoomList(socket, mongoConnection);
   } catch (err) {
     // Set and emit message
-    serverResponse.message = 'We have a problem, please try again later.';
-    socket.emit('serverResponse', serverResponse);
-    serverResponse.isRequestSuccess = false;
+    response.message = 'We have a problem, please try again later.';
+    response.status = false;
+    socket.emit('changeName', response);
     //TODO handle logs, delete consol.log
     console.log(err);
   }

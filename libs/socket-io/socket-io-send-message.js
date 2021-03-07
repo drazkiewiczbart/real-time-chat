@@ -3,22 +3,22 @@ const { dbName } = require('../../config');
 
 const sendMessage = async (socket, mongoConnection, message) => {
   // Create response object
-  const serverResponse = {
+  const response = {
     from: null,
+    target: socket.id,
     message,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
-    request: 'Send message',
-    requestMessage: message,
-    isRequestSuccess: null,
+    data: message,
+    status: null,
   };
 
   // Return if the user has not provided a name
   if (message === '') {
-    serverResponse.from = 'Chat bot';
-    serverResponse.message = 'Type something, your message is empty.';
-    serverResponse.isRequestSuccess = false;
-    socket.emit('serverResponse', serverResponse);
+    response.from = 'Chat bot';
+    response.message = 'Type something, your message is empty.';
+    response.status = false;
+    socket.emit('sendMessage', response);
     return;
   }
 
@@ -30,7 +30,7 @@ const sendMessage = async (socket, mongoConnection, message) => {
       .findOne({ _id: socket.id });
 
     // Set response author
-    serverResponse.from = userName;
+    response.from = userName;
 
     // If user in room
     if (userRoomId) {
@@ -41,17 +41,17 @@ const sendMessage = async (socket, mongoConnection, message) => {
         .findOne({ _id: userRoomId });
 
       // Emit message
-      socket.to(roomName).emit('serverResponse', serverResponse);
+      socket.to(roomName).emit('sendMessage', response);
     }
 
     // Emit message
-    serverResponse.isRequestSuccess = true;
-    socket.emit('serverResponse', serverResponse);
+    response.status = true;
+    socket.emit('sendMessage', response);
   } catch (err) {
     // Set and emit message
-    serverResponse.message = 'We have a problem, please try again later.';
-    serverResponse.isRequestSuccess = false;
-    socket.emit('serverResponse', serverResponse);
+    response.message = 'We have a problem, please try again later.';
+    response.status = false;
+    socket.emit('sendMessage', response);
     //TODO handle logs, delete consol.log
     console.log(err);
   }

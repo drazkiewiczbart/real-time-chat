@@ -46,10 +46,8 @@
       <div id="messages" class="row messages">
         <div id="messages-content" class="col col-md-9 messages-content"></div>
       </div>
-      <div id="users-in-room" class="row user-in-room user-in-room--hide">
-        <div class="col user-in-room-content">
-          <p>Users</p>
-        </div>
+      <div id="users-in-room" class="row users-in-room users-in-room--hide">
+        <div id="users-in-room-content" class="col users-in-room-content"></div>
       </div>
       <div id="settings" class="row settings settings--hide">
         <div class="col settings-content">
@@ -162,8 +160,25 @@
         </div>
       </div>
     </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="javascripts/website-utilities.js"></script>
+    <script type="module" src="/socket.io/socket.io.js"></script>
+    <script type="module" src="/javascripts/website-utilities.js"></script>
+    <script type="module" src="/javascripts/socket-io-utilities.js"></script>
+    <script type="module" src="/javascripts/socket-io-change-name.js"></script>
+    <script type="module" src="/javascripts/socket-io-join-to-room.js"></script>
+    <script type="module" src="/javascripts/socket-io-leave-room.js"></script>
+    <script type="module" src="/javascripts/socket-io-send-message.js"></script>
+    <script
+      type="module"
+      src="/javascripts/socket-io-user-connection.js"
+    ></script>
+    <script
+      type="module"
+      src="/javascripts/socket-io-user-disconnect.js"
+    ></script>
+    <script
+      type="module"
+      src="/javascripts/socket-io-users-in-room.js"
+    ></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"

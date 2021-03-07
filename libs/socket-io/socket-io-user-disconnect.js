@@ -1,16 +1,16 @@
 const moment = require('moment');
 const { dbName } = require('../../config');
+const { updateUserInRoomList } = require('./socket-io-users-in-room');
 
 const userDisconnect = async (socket, mongoConnection) => {
   // Create response object
-  const serverResponse = {
-    from: 'Chat bot',
+  const response = {
+    target: socket.id,
     message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
-    request: 'User disconnect',
-    requestMessage: null,
-    isRequestSuccess: null,
+    data: null,
+    status: null,
   };
 
   try {
@@ -67,14 +67,17 @@ const userDisconnect = async (socket, mongoConnection) => {
     }
 
     // Set and emit message
-    serverResponse.message = `${userName} disconnected from ${roomName} room.`;
-    serverResponse.isRequestSuccess = true;
-    socket.to(roomName).emit('serverResponse', serverResponse);
+    response.message = `${userName} disconnected from ${roomName} room.`;
+    response.status = true;
+    socket.to(roomName).emit('userDisconnect', response);
+
+    // Update users in room list
+    await updateUserInRoomList(socket, mongoConnection);
   } catch (err) {
     // Set and emit message
-    serverResponse.message = 'We have a problem, please try again later.';
-    serverResponse.isRequestSuccess = false;
-    socket.emit('serverResponse', serverResponse);
+    response.message = 'We have a problem, please try again later.';
+    response.status = false;
+    socket.emit('userDisconnect', response);
     //TODO handle logs, delete consol.log
     console.log(err);
   }

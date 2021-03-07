@@ -1,16 +1,16 @@
 const moment = require('moment');
 const { dbName } = require('../../config');
+const { updateUserInRoomList } = require('./socket-io-users-in-room');
 
 const leaveRoom = async (socket, mongoConnection) => {
   // Create response object
-  const serverResponse = {
-    from: 'Chat bot',
+  const response = {
+    target: socket.id,
     message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
-    request: 'Leave room',
-    requestMessage: null,
-    isRequestSuccess: null,
+    data: null,
+    status: null,
   };
 
   try {
@@ -26,9 +26,9 @@ const leaveRoom = async (socket, mongoConnection) => {
 
     // Return if user isn't current in room
     if (!userRoomId) {
-      serverResponse.message = `You cannot leave private/default room.`;
-      serverResponse.isRequestSuccess = false;
-      socket.emit('serverResponse', serverResponse);
+      response.message = `You cannot leave private/default room.`;
+      response.status = false;
+      socket.emit('leaveRoom', response);
       return;
     }
 
@@ -68,16 +68,19 @@ const leaveRoom = async (socket, mongoConnection) => {
     socket.leave(roomName);
 
     // Set and emit message
-    serverResponse.message = `${userName} left the room.`;
-    serverResponse.isRequestSuccess = true;
-    socket.to(roomName).emit('serverResponse', serverResponse);
-    serverResponse.message = `You have left the ${roomName} room.`;
-    socket.emit('serverResponse', serverResponse);
+    response.message = `${userName} left the room.`;
+    response.status = true;
+    socket.to(roomName).emit('leaveRoom', response);
+    response.message = `You have left the ${roomName} room.`;
+    socket.emit('leaveRoom', response);
+
+    // Update users in room list
+    await updateUserInRoomList(socket, mongoConnection);
   } catch (err) {
     // Set and emit message
-    serverResponse.message = 'We have a problem, please try again later.';
-    serverResponse.isRequestSuccess = false;
-    socket.emit('serverResponse', serverResponse);
+    response.message = 'We have a problem, please try again later.';
+    response.status = false;
+    socket.emit('leaveRoom', response);
     //TODO handle logs, delete consol.log
     console.log(err);
   }

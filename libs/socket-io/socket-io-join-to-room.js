@@ -1,23 +1,23 @@
 const moment = require('moment');
 const { dbName } = require('../../config');
+const { updateUserInRoomList } = require('./socket-io-users-in-room');
 
 const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
   // Create response object
-  const serverResponse = {
-    from: 'Chat bot',
+  const response = {
+    target: socket.id,
     message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
-    request: 'Join to room',
-    requestMessage: joinRoomName,
-    isRequestSuccess: null,
+    data: joinRoomName,
+    status: null,
   };
 
   // Return if the user has not provided a room name
   if (joinRoomName === '') {
-    serverResponse.message = 'You need give room name before create or join.';
-    serverResponse.isRequestSuccess = false;
-    socket.emit('serverResponse', serverResponse);
+    response.message = 'You need give room name before create or join.';
+    response.status = false;
+    socket.emit('joinToRoom', response);
     return;
   }
 
@@ -34,10 +34,9 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
 
     // Return if user is current in room
     if (userRoomId) {
-      serverResponse.message =
-        'Before join to new room you must leave current room.';
-      serverResponse.isRequestSuccess = false;
-      socket.emit('serverResponse', serverResponse);
+      response.message = 'Before join to new room you must leave current room.';
+      response.status = false;
+      socket.emit('joinToRoom', response);
       return;
     }
 
@@ -79,9 +78,12 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
       socket.join(joinRoomName);
 
       // Set and emit message, return
-      serverResponse.message = `You are joined to ${joinRoomName} room.`;
-      serverResponse.isRequestSuccess = true;
-      socket.emit('serverResponse', serverResponse);
+      response.message = `You are joined to ${joinRoomName} room.`;
+      response.status = true;
+      socket.emit('joinToRoom', response);
+
+      // Update users in room list
+      await updateUserInRoomList(socket, mongoConnection);
       return;
     }
 
@@ -96,9 +98,9 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
 
     // Return if name is used
     if (isUserNameUsed) {
-      serverResponse.message = `User with this name is already in this room. Choose different name.`;
-      serverResponse.isRequestSuccess = false;
-      socket.emit('serverResponse', serverResponse);
+      response.message = `User with this name is already in this room. Choose different name.`;
+      response.status = false;
+      socket.emit('joinToRoom', response);
       return;
     }
 
@@ -127,16 +129,19 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
     socket.join(roomName);
 
     // Set and emit message
-    serverResponse.message = `${userName} joined to ${roomName} room.`;
-    serverResponse.isRequestSuccess = true;
-    socket.to(roomName).emit('serverResponse', serverResponse);
-    serverResponse.message = `You are joined to ${roomName} room.`;
-    socket.emit('serverResponse', serverResponse);
+    response.message = `${userName} joined to ${roomName} room.`;
+    response.status = true;
+    socket.to(roomName).emit('joinToRoom', response);
+    response.message = `You are joined to ${roomName} room.`;
+    socket.emit('joinToRoom', response);
+
+    // Update users in room list
+    await updateUserInRoomList(socket, mongoConnection);
   } catch (err) {
     // Set and emit message
-    serverResponse.message = 'We have a problem, please try again later.';
-    serverResponse.isRequestSuccess = false;
-    socket.emit('serverResponse', serverResponse);
+    response.message = 'We have a problem, please try again later.';
+    response.isRequestSuccess = false;
+    socket.emit('joinToRoom', response);
     //TODO handle logs
     console.log(err);
   }
