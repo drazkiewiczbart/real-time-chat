@@ -9,27 +9,45 @@ window.addEventListener('resize', () => {
 });
 
 /*
- ** Switch between message and settings window
+ ** Switch between message, user and setting window
  */
 $('#menu-content-settings-icon').click(() => {
-  if ($('#menu-content-messages-icon').hasClass('menu-content-icon--active')) {
-    $('#menu-content-messages-icon').toggleClass('menu-content-icon--active');
-    $('#messages').toggleClass('messages--hide');
-    $('#menu-content-settings-icon').toggleClass('menu-content-icon--active');
-    $('#settings').toggleClass('settings--hide');
+  if (!$('#menu-content-settings-icon').hasClass('menu-content-icon--active')) {
+    $('#settings').removeClass('settings--hide');
     $('#header-content-title').text('Settings');
-    $('#footer').toggleClass('footer--hide');
+    $('#menu-content-settings-icon').addClass('menu-content-icon--active');
+
+    $('#messages').addClass('messages--hide');
+    $('#footer').addClass('footer--hide');
+    $('#menu-content-users-icon').removeClass('menu-content-icon--active');
+    $('#menu-content-messages-icon').removeClass('menu-content-icon--active');
   }
 });
 
 $('#menu-content-messages-icon').click(() => {
-  if ($('#menu-content-settings-icon').hasClass('menu-content-icon--active')) {
-    $('#menu-content-messages-icon').toggleClass('menu-content-icon--active');
-    $('#messages').toggleClass('messages--hide');
-    $('#menu-content-settings-icon').toggleClass('menu-content-icon--active');
-    $('#settings').toggleClass('settings--hide');
+  if (!$('#menu-content-messages-icon').hasClass('menu-content-icon--active')) {
+    $('#messages').removeClass('messages--hide');
     $('#header-content-title').text('Messages');
-    $('#footer').toggleClass('footer--hide');
+    $('#menu-content-messages-icon').addClass('menu-content-icon--active');
+
+    $('#settings').addClass('settings--hide');
+    $('#footer').removeClass('footer--hide');
+    $('#menu-content-users-icon').removeClass('menu-content-icon--active');
+    $('#menu-content-settings-icon').removeClass('menu-content-icon--active');
+  }
+});
+
+$('#menu-content-users-icon').click(() => {
+  if (!$('#menu-content-users-icon').hasClass('menu-content-icon--active')) {
+    $('#users-in-room').removeClass('users-in-room--hide');
+    $('#header-content-title').text('Users in room');
+    $('#menu-content-users-icon').addClass('menu-content-icon--active');
+
+    $('#settings').addClass('settings--hide');
+    $('#messages').addClass('messages--hide');
+    $('#footer').addClass('footer--hide');
+    $('#menu-content-messages-icon').removeClass('menu-content-icon--active');
+    $('#menu-content-settings-icon').removeClass('menu-content-icon--active');
   }
 });
 
@@ -134,7 +152,14 @@ $('#footer-content-form').submit((event) => {
  ** Send message after Enter key press
  */
 $('#footer-content-form-content-text').keypress((key) => {
+  const inputValueLength = $('#footer-content-form-content-text').val().length;
+
   if (key.keyCode === 13 && !key.shiftKey) {
+    if (inputValueLength === 0) {
+      key.preventDefault();
+      return;
+    }
+
     key.preventDefault();
     const message = $('#footer-content-form-content-text').val();
     socket.emit('message', message);
