@@ -4,7 +4,7 @@ const { dbName } = require('../../config');
 const changeName = async (socket, mongoConnection, newUserName) => {
   // Create response object
   const serverResponse = {
-    from: 'Server',
+    from: 'Chat bot',
     message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
@@ -15,7 +15,7 @@ const changeName = async (socket, mongoConnection, newUserName) => {
 
   // Return if the user has not provided a name
   if (newUserName === '') {
-    serverResponse.message = 'You need pass your name.';
+    serverResponse.message = 'You need give name before change.';
     serverResponse.isRequestSuccess = false;
     socket.emit('serverResponse', serverResponse);
     return;

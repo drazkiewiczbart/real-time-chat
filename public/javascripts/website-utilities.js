@@ -34,6 +34,39 @@ $('#menu-content-messages-icon').click(() => {
 });
 
 /*
+ ** Enable change name button if input has value
+ */
+$('#settings-content-actions-input-text-name').keyup(() => {
+  if ($('#settings-content-actions-input-text-name').val().length !== 0) {
+    $('#settings-content-actions-input-button-name').prop('disabled', false);
+  } else {
+    $('#settings-content-actions-input-button-name').prop('disabled', true);
+  }
+});
+
+/*
+ ** Enable create or join button if input has value
+ */
+$('#settings-content-actions-input-text').keyup(() => {
+  if ($('#settings-content-actions-input-text').val().length !== 0) {
+    $('#settings-content-actions-input-button-join').prop('disabled', false);
+  } else {
+    $('#settings-content-actions-input-button-join').prop('disabled', true);
+  }
+});
+
+/*
+ ** Enable message button if input has value
+ */
+$('#footer-content-form-content-text').keyup(() => {
+  if ($('#footer-content-form-content-text').val().length !== 0) {
+    $('#footer-content-form-content-button').prop('disabled', false);
+  } else {
+    $('#footer-content-form-content-button').prop('disabled', true);
+  }
+});
+
+/*
  ** Hide settings window
  */
 const hideSettings = () => {
@@ -53,17 +86,19 @@ const changeDisplayName = (name) => {
 };
 
 /*
- ** Change room name if user change room
+ ** Change room name and enable button "leave" if user change room
  */
 const changeDisplayRoom = (name) => {
   $('#settings-content-room').text(name);
+  $('#settings-content-actions-input-button-leave').prop('disabled', false);
 };
 
 /*
- ** Restore display room to default
+ ** Restore display room to default and disable button "leave"
  */
 const leaveRoom = () => {
-  $('#settings-content-room').text('Default');
+  $('#settings-content-room').text('Private/Default');
+  $('#settings-content-actions-input-button-leave').prop('disabled', true);
 };
 
 /*
@@ -71,6 +106,13 @@ const leaveRoom = () => {
  */
 const scrollWindowMessages = () => {
   $('#messages').scrollTop($('#messages')[0].scrollHeight);
+};
+
+/*
+ ** Clear message windows
+ */
+const clearMessageWindow = () => {
+  $('#messages-content').html('');
 };
 
 /*
@@ -97,7 +139,6 @@ $('#footer-content-form-content-text').keypress((key) => {
     const message = $('#footer-content-form-content-text').val();
     socket.emit('message', message);
     $('#footer-content-form-content-text').val('');
-    $('#footer-content-form-content-text').trim();
   }
 });
 
@@ -117,6 +158,7 @@ $('#settings-content-actions-input-button-join').click((event) => {
   const message = $('#settings-content-actions-input-text').val();
   socket.emit('joinToRoom', message);
   $('#settings-content-actions-input-text').val('');
+  $('#settings-content-actions-input-button-join').prop('disabled', true);
   hideSettings();
 });
 
@@ -128,6 +170,8 @@ $('#settings-content-actions-input-button-name').click((event) => {
   const message = $('#settings-content-actions-input-text-name').val();
   socket.emit('changeName', message);
   $('#settings-content-actions-input-text-name').val('');
+  $('#settings-content-actions-input-button-name').prop('disabled', true);
+
   hideSettings();
 });
 
@@ -136,13 +180,13 @@ $('#settings-content-actions-input-button-name').click((event) => {
  */
 const createMessageView = (from, message, date, time) => {
   const isServerAuthor =
-    from === 'Server' ? 'messages-content-single--server' : '';
+    from === 'Chat bot' ? 'messages-content-single--server' : '';
 
   const templateMessage = `
     <div class="messages-content-single ${isServerAuthor}">
       <div class="messages-content-single-from-when-wrapper">
         <p class="messages-content-single-from">${from}</p>
-        <p class="messages-content-single-when">${time} ${date}</p>
+        <p class="messages-content-single-when">${time} / ${date}</p>
       </div>
       <p class="messages-content-single-text">
         ${message}
@@ -165,20 +209,23 @@ const publishMessage = (serverResponse) => {
     requestMessage,
     isRequestSuccess,
   } = serverResponse;
-  const newMessage = createMessageView(from, message, date, time);
-  $(newMessage).appendTo($('#messages-content'));
 
   if (request === 'Change name' && isRequestSuccess) {
     changeDisplayName(requestMessage);
   }
 
   if (request === 'Join to room' && isRequestSuccess) {
+    clearMessageWindow();
     changeDisplayRoom(requestMessage);
   }
 
   if (request === 'Leave room' && isRequestSuccess) {
+    clearMessageWindow();
     leaveRoom();
   }
+
+  const newMessage = createMessageView(from, message, date, time);
+  $(newMessage).appendTo($('#messages-content'));
 
   scrollWindowMessages();
 };

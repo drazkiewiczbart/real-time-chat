@@ -15,8 +15,8 @@ const sendMessage = async (socket, mongoConnection, message) => {
 
   // Return if the user has not provided a name
   if (message === '') {
-    serverResponse.from = 'Server';
-    serverResponse.message = 'Type something, your message is empty';
+    serverResponse.from = 'Chat bot';
+    serverResponse.message = 'Type something, your message is empty.';
     serverResponse.isRequestSuccess = false;
     socket.emit('serverResponse', serverResponse);
     return;

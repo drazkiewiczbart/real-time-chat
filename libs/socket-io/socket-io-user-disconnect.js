@@ -4,7 +4,7 @@ const { dbName } = require('../../config');
 const userDisconnect = async (socket, mongoConnection) => {
   // Create response object
   const serverResponse = {
-    from: 'Server',
+    from: 'Chat bot',
     message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
@@ -67,7 +67,7 @@ const userDisconnect = async (socket, mongoConnection) => {
     }
 
     // Set and emit message
-    serverResponse.message = `${userName} disconnected.`;
+    serverResponse.message = `${userName} disconnected from ${roomName} room.`;
     serverResponse.isRequestSuccess = true;
     socket.to(roomName).emit('serverResponse', serverResponse);
   } catch (err) {

@@ -4,8 +4,9 @@ const { dbName } = require('../../config');
 const userConnection = async (socket, mongoConnection) => {
   // Create response object
   const serverResponse = {
-    from: 'Server',
-    message: 'Hello new user.',
+    from: 'Chat bot',
+    message:
+      '[WELCOME MESSAGE] Hello new user! This is your private/default chat room. In this place only you can see your messages. In the settings above you can change your name, create room or join to existed room or leave room. In one time you can be only in one room. It is all, have a nice day!',
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
     request: 'User connection',

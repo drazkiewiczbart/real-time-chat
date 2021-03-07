@@ -4,7 +4,7 @@ const { dbName } = require('../../config');
 const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
   // Create response object
   const serverResponse = {
-    from: 'Server',
+    from: 'Chat bot',
     message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
@@ -15,7 +15,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
 
   // Return if the user has not provided a room name
   if (joinRoomName === '') {
-    serverResponse.message = 'You need pass your room name.';
+    serverResponse.message = 'You need give room name before create or join.';
     serverResponse.isRequestSuccess = false;
     socket.emit('serverResponse', serverResponse);
     return;
@@ -35,7 +35,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
     // Return if user is current in room
     if (userRoomId) {
       serverResponse.message =
-        'Before join to room you must leave current room.';
+        'Before join to new room you must leave current room.';
       serverResponse.isRequestSuccess = false;
       socket.emit('serverResponse', serverResponse);
       return;
@@ -79,7 +79,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
       socket.join(joinRoomName);
 
       // Set and emit message, return
-      serverResponse.message = `You are joind to ${joinRoomName} room.`;
+      serverResponse.message = `You are joined to ${joinRoomName} room.`;
       serverResponse.isRequestSuccess = true;
       socket.emit('serverResponse', serverResponse);
       return;
@@ -96,7 +96,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
 
     // Return if name is used
     if (isUserNameUsed) {
-      serverResponse.message = `User with this name is already in this room. Choose different name`;
+      serverResponse.message = `User with this name is already in this room. Choose different name.`;
       serverResponse.isRequestSuccess = false;
       socket.emit('serverResponse', serverResponse);
       return;
@@ -127,14 +127,14 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
     socket.join(roomName);
 
     // Set and emit message
-    serverResponse.message = `${userName} join to ${roomName} room.`;
+    serverResponse.message = `${userName} joined to ${roomName} room.`;
     serverResponse.isRequestSuccess = true;
     socket.to(roomName).emit('serverResponse', serverResponse);
-    serverResponse.message = `You are joind to ${roomName} room.`;
+    serverResponse.message = `You are joined to ${roomName} room.`;
     socket.emit('serverResponse', serverResponse);
   } catch (err) {
     // Set and emit message
-    serverResponse.message = 'We have a problem, please try again later';
+    serverResponse.message = 'We have a problem, please try again later.';
     serverResponse.isRequestSuccess = false;
     socket.emit('serverResponse', serverResponse);
     //TODO handle logs
