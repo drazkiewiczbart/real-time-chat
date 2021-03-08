@@ -82,8 +82,8 @@ const changeName = async (socket, mongoConnection, newUserName) => {
       response.message = `Your name is changed. Current name is ${newUserName}.`;
       socket.emit('changeName', response);
 
-      // Update users in room list
-      await updateUserInRoomList(socket, mongoConnection);
+      // Emit list users in room
+      updateUserInRoomList(socket, mongoConnection, userRoomId);
       return;
     }
 
@@ -98,8 +98,8 @@ const changeName = async (socket, mongoConnection, newUserName) => {
     response.status = true;
     socket.emit('changeName', response);
 
-    // Update users in room list
-    await updateUserInRoomList(socket, mongoConnection);
+    // Emit list users in room
+    updateUserInRoomList(socket, mongoConnection);
   } catch (err) {
     // Set and emit message
     response.message = 'We have a problem, please try again later.';

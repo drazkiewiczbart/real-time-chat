@@ -74,8 +74,8 @@ const leaveRoom = async (socket, mongoConnection) => {
     response.message = `You have left the ${roomName} room.`;
     socket.emit('leaveRoom', response);
 
-    // Update users in room list
-    await updateUserInRoomList(socket, mongoConnection);
+    // Emit list users in room
+    updateUserInRoomList(socket, mongoConnection, userRoomId);
   } catch (err) {
     // Set and emit message
     response.message = 'We have a problem, please try again later.';

@@ -26,8 +26,8 @@ const userConnection = async (socket, mongoConnection) => {
     response.status = true;
     socket.emit('userConnection', response);
 
-    // Update users in room list
-    await updateUserInRoomList(socket, mongoConnection);
+    // Emit list users in room
+    updateUserInRoomList(socket, mongoConnection);
   } catch (err) {
     // Set and emit message
     response.message = 'We have a problem, please try again later.';

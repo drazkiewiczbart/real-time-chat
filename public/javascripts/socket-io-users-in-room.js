@@ -16,8 +16,16 @@ const createMessageView = (target, message) => {
   );
 
   for (const user of message) {
-    const isUser = target === socket.id ? 'users-in-room-content--you' : '';
-    messageView.append(`<p class="${isUser}">${user.name}</p>`);
+    // console.log($('span#settings-content-name').val());
+    if (
+      target === socket.id &&
+      $('#settings-content-name').val() === user.name
+    ) {
+      messageView.append(
+        `<p class="users-in-room-content--you">${user.name}</p>`,
+      );
+    }
+    messageView.append(`<p>${user.name}</p>`);
   }
   return messageView;
 };

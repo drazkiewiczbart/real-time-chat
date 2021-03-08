@@ -1,7 +1,11 @@
 const moment = require('moment');
 const { dbName } = require('../../config');
 
-const updateUserInRoomList = async (socket, mongoConnection) => {
+const updateUserInRoomList = async (
+  socket,
+  mongoConnection,
+  userRoomId = null,
+) => {
   // Create response object
   const response = {
     target: socket.id,
@@ -13,25 +17,87 @@ const updateUserInRoomList = async (socket, mongoConnection) => {
   };
 
   try {
-    // Get user from database
-    const {
-      _id: userId,
-      name: userName,
-      roomId: userRoomId,
-    } = await mongoConnection
+    // Check if user exists
+    const isUserExists = await mongoConnection
       .db(dbName)
       .collection('users')
       .findOne({ _id: socket.id });
 
-    // If user is in default room, send response and return
-    if (!userRoomId) {
+    // Check if room exists
+    const isRoomExists = await mongoConnection
+      .db(dbName)
+      .collection('rooms')
+      .findOne({ _id: userRoomId });
+
+    // Check if user is in room
+    const isUserInRoom = await mongoConnection
+      .db(dbName)
+      .collection('rooms')
+      .findOne({
+        _id: userRoomId,
+        'connectedUsers.socketId': socket.id,
+      });
+
+    // Case if user disconnect
+    if (!isUserExists && isRoomExists) {
+      // Get room from database
+      const {
+        name: roomName,
+        connectedUsers: usersInRoom,
+      } = await mongoConnection
+        .db(dbName)
+        .collection('rooms')
+        .findOne({ _id: userRoomId });
+
+      // Set and emit message
+      response.message = usersInRoom;
+      response.status = true;
+      socket.to(roomName).emit('usersInRoom', response);
+      return;
+    }
+
+    // Case if user not join to room
+    if (!isRoomExists) {
+      const { _id: userId, name: userName } = await mongoConnection
+        .db(dbName)
+        .collection('users')
+        .findOne({ _id: socket.id });
+
+      // Set and emit message
       response.message = [{ socketId: userId, name: userName }];
       response.status = true;
       socket.emit('usersInRoom', response);
       return;
     }
 
-    // Get user room from database
+    // Case if user leave room
+    if (isRoomExists && !isUserInRoom) {
+      // Get user from database
+      const { _id: userId, name: userName } = await mongoConnection
+        .db(dbName)
+        .collection('users')
+        .findOne({ _id: socket.id });
+
+      // Get room from database
+      const {
+        name: roomName,
+        connectedUsers: usersInRoom,
+      } = await mongoConnection
+        .db(dbName)
+        .collection('rooms')
+        .findOne({ _id: userRoomId });
+
+      // Set and emit message
+      response.message = usersInRoom;
+      response.status = true;
+      socket.to(roomName).emit('usersInRoom', response);
+      response.message = [{ socketId: userId, name: userName }];
+      socket.emit('usersInRoom', response);
+      return;
+    }
+
+    // Case if user is in room
+    // Get room from database
     const {
       name: roomName,
       connectedUsers: usersInRoom,

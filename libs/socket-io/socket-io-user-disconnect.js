@@ -71,8 +71,8 @@ const userDisconnect = async (socket, mongoConnection) => {
     response.status = true;
     socket.to(roomName).emit('userDisconnect', response);
 
-    // Update users in room list
-    await updateUserInRoomList(socket, mongoConnection);
+    // Emit list users in room
+    updateUserInRoomList(socket, mongoConnection, userRoomId);
   } catch (err) {
     // Set and emit message
     response.message = 'We have a problem, please try again later.';
