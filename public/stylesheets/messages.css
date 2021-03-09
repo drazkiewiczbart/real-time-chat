@@ -1,9 +1,7 @@
 .messages {
-  /* display: flex; */
   justify-content: center;
   flex-grow: 1;
   overflow: scroll;
-  /* background-color: rgb(255, 255, 255); */
 }
 
 .messages--hide {
@@ -13,7 +11,7 @@
 .messages-content {
   display: flex;
   flex-direction: column;
-  padding: 3rem 2rem;
+  padding: 3rem 0;
 }
 
 .messages-content-single {
@@ -28,7 +26,6 @@
 
 .messages-content-single-from-when-wrapper {
   display: flex;
-  /* flex-direction: row; */
   justify-content: space-between;
 }
 

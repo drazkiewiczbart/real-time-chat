@@ -1,9 +1,6 @@
 .settings {
-  /* display: flex; */
-  /* justify-content: center; */
   flex-grow: 1;
   overflow: scroll;
-  /* background-color: rgb(255, 255, 255); */
 }
 
 .settings--hide {
@@ -13,9 +10,7 @@
 .settings-content {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
-  /* padding: 0; */
 }
 
 .settings-content-data {
@@ -109,7 +104,6 @@
   flex-grow: 2;
   justify-content: center;
   align-items: center;
-  /* text-align: center; */
   color: rgb(189, 189, 189);
 }
 

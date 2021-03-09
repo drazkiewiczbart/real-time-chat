@@ -1,13 +1,10 @@
 .header {
-  /* display: flex; */
   justify-content: center;
-  /* background-color: rgb(255, 255, 255); */
 }
 
 .header-content {
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   padding: 2.5rem 0;
 }
 

@@ -31,5 +31,3 @@ require('./routers/chat-room-router')(app);
     console.error(`Server isn't listening. ${err}.`);
   }
 })();
-
-//TODO add comments

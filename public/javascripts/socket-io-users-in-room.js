@@ -12,7 +12,7 @@ const clearUsersInRoomWindow = () => {
  */
 const createUpdateTimeView = (date, time) => {
   const updateContainer = $(
-    '<div class="col users-in-room-content-update"></div>',
+    '<div class="col col-md-9 users-in-room-content-update"></div>',
   );
   const updateObject = `<p>Last update: ${time} / ${date}</p>`;
   updateContainer.append(updateObject);
@@ -24,7 +24,7 @@ const createUpdateTimeView = (date, time) => {
  */
 const createMessageView = (message) => {
   const usersContainer = $(
-    '<div id="users-in-room-content" class="col users-in-room-content"></div>',
+    '<div id="users-in-room-content" class="col col-md-9 users-in-room-content"></div>',
   );
   let youInContainer;
 

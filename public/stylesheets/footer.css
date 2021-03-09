@@ -1,5 +1,4 @@
 .footer {
-  /* display: flex; */
   justify-content: center;
 }
 
@@ -8,7 +7,7 @@
 }
 
 .footer-content {
-  padding: 2rem 2rem;
+  padding: 2rem 0;
   border-top: 0.1rem solid rgb(221, 221, 221);
 }
 
