@@ -15,7 +15,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
 
   // Return if the user has not provided a room name
   if (joinRoomName === '') {
-    response.message = 'You need give room name before create or join.';
+    response.message = 'You need to enter a room name before create or join.';
     response.status = false;
     socket.emit('joinToRoom', response);
     return;
@@ -34,7 +34,8 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
 
     // Return if user is current in room
     if (userRoomId) {
-      response.message = 'Before join to new room you must leave current room.';
+      response.message =
+        'Before joining to new room you must leave current room.';
       response.status = false;
       socket.emit('joinToRoom', response);
       return;
@@ -78,7 +79,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
       socket.join(joinRoomName);
 
       // Set and emit message, return
-      response.message = `You are joined to ${joinRoomName} room.`;
+      response.message = `You joined to ${joinRoomName} room.`;
       response.status = true;
       socket.emit('joinToRoom', response);
 
@@ -132,7 +133,7 @@ const joinToRoom = async (socket, mongoConnection, joinRoomName) => {
     response.message = `${userName} joined to ${roomName} room.`;
     response.status = true;
     socket.to(roomName).emit('joinToRoom', response);
-    response.message = `You are joined to ${roomName} room.`;
+    response.message = `You joined to ${roomName} room.`;
     socket.emit('joinToRoom', response);
 
     // Emit list users in room

@@ -15,7 +15,7 @@ const changeName = async (socket, mongoConnection, newUserName) => {
 
   // Return if the user has not provided a name
   if (newUserName === '') {
-    response.message = 'You need give name before change.';
+    response.message = 'You need to enter a name before change.';
     response.status = false;
     socket.emit('changeName', response);
     return;
