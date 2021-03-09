@@ -1,0 +1,20 @@
+@media (min-width: 576px) {
+  .settings-content-data {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 768px) {
+}
+
+@media (min-width: 992px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 13px;
+  }
+}

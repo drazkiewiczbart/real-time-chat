@@ -1,0 +1,40 @@
+.users-in-room {
+  /* display: flex; */
+  flex-direction: column;
+  /* justify-content: center; */
+  flex-grow: 1;
+  overflow: scroll;
+  text-align: center;
+  /* background-color: rgb(255, 255, 255); */
+}
+
+.users-in-room--hide {
+  display: none;
+}
+
+.users-in-room-content {
+  /* display: flex; */
+  flex-direction: column;
+  padding: 3rem 2rem;
+  /* text-align: center; */
+  flex-grow: 10;
+  font-size: 1.4rem;
+}
+
+.users-in-room-content--you {
+  margin: 0;
+  padding: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: rgb(0, 35, 131);
+}
+
+.users-in-room-content-update {
+  /* display: flex; */
+  flex-direction: column;
+  padding: 3rem 2rem;
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgb(189, 189, 189);
+  border-top: 0.1rem solid rgb(221, 221, 221);
+}
