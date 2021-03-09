@@ -5,7 +5,7 @@ const sendMessage = async (socket, mongoConnection, message) => {
   // Create response object
   const response = {
     from: null,
-    target: socket.id,
+    requestAuthor: socket.id,
     message,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),

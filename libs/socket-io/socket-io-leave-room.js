@@ -1,11 +1,11 @@
 const moment = require('moment');
 const { dbName } = require('../../config');
-const { updateUserInRoomList } = require('./socket-io-users-in-room');
+const { updateUsersList } = require('./socket-io-users-in-room');
 
 const leaveRoom = async (socket, mongoConnection) => {
   // Create response object
   const response = {
-    target: socket.id,
+    requestAuthor: socket.id,
     message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
@@ -75,7 +75,7 @@ const leaveRoom = async (socket, mongoConnection) => {
     socket.emit('leaveRoom', response);
 
     // Emit list users in room
-    updateUserInRoomList(socket, mongoConnection, userRoomId);
+    updateUsersList(socket, mongoConnection, userRoomId);
   } catch (err) {
     // Set and emit message
     response.message = 'We have a problem, please try again later.';

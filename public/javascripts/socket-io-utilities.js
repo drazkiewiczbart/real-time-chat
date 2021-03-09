@@ -36,10 +36,32 @@ const clearMessageWindow = () => {
   $('#messages-content').html('');
 };
 
+/*
+ ** New message template generator
+ */
+const createMessageView = (message, date, time, from = 'Chat bot') => {
+  const isMessageFromServer =
+    from === 'Chat bot' ? 'messages-content-single--server' : '';
+
+  const messageView = `
+    <div class="messages-content-single ${isMessageFromServer}">
+      <div class="messages-content-single-from-when-wrapper">
+        <p class="messages-content-single-from">${from}</p>
+        <p class="messages-content-single-when">${time} / ${date}</p>
+      </div>
+      <p class="messages-content-single-text">
+        ${message}
+      </p>
+    </div>
+  `;
+  return messageView;
+};
+
 export {
   socket,
   hideSettings,
   publishMessage,
   scrollWindowMessages,
   clearMessageWindow,
+  createMessageView,
 };

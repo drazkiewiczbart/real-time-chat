@@ -1,43 +1,50 @@
 import { socket } from './socket-io-utilities.js';
 
 /*
- ** Clear Users in room window
+ ** Clear users list window
  */
 const clearUsersInRoomWindow = () => {
   $('#users-in-room').html('');
 };
 
 /*
- ** Main socket io, get server response and show in users in room
+ ** Create view for update time and date
  */
-const createMessageView = (target, message) => {
-  const messageView = $(
-    '<div id="users-in-room-content" class="col users-in-room-content">',
+const createUpdateTimeView = (date, time) => {
+  const updateContainer = $(
+    '<div class="col users-in-room-content-update"></div>',
   );
+  const updateObject = `<p>Last update: ${time} / ${date}</p>`;
+  updateContainer.append(updateObject);
+  return updateContainer;
+};
 
-  for (const user of message) {
-    // console.log($('span#settings-content-name').val());
-    if (
-      target === socket.id &&
-      $('#settings-content-name').val() === user.name
-    ) {
-      messageView.append(
-        `<p class="users-in-room-content--you">${user.name}</p>`,
-      );
+/*
+ ** Create list of users
+ */
+const createMessageView = (message) => {
+  const usersContainer = $(
+    '<div id="users-in-room-content" class="col users-in-room-content"></div>',
+  );
+  let youInContainer;
+
+  message.forEach((user) => {
+    if (user.socketId === socket.id) {
+      youInContainer = `<p class="users-in-room-content--you">You</p>`;
+    } else {
+      usersContainer.append(`<p>${user.name}</p>`);
     }
-    messageView.append(`<p>${user.name}</p>`);
-  }
-  return messageView;
+  });
+  usersContainer.prepend(youInContainer);
+  return usersContainer;
 };
 
 /*
  ** Add message view to DOM
  */
-const publishMessageInUsersInRoom = (messageView, date, time) => {
-  $('#users-in-room').append(messageView);
-  $('#users-in-room').append(
-    `<div class="col users-in-room-content-update"><p>Last update: ${time} / ${date}</p></div>`,
-  );
+const publishMessageInUsersInRoom = (message, date, time) => {
+  $('#users-in-room').append(createMessageView(message));
+  $('#users-in-room').append(createUpdateTimeView(date, time));
 };
 
 /*
@@ -45,7 +52,6 @@ const publishMessageInUsersInRoom = (messageView, date, time) => {
  */
 socket.on('usersInRoom', (serverResponse) => {
   const { target, message, date, time, data, status } = serverResponse;
-  const messageView = createMessageView(target, message);
   clearUsersInRoomWindow();
-  publishMessageInUsersInRoom(messageView, date, time);
+  publishMessageInUsersInRoom(message, date, time);
 });

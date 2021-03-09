@@ -1,14 +1,10 @@
 const moment = require('moment');
 const { dbName } = require('../../config');
 
-const updateUserInRoomList = async (
-  socket,
-  mongoConnection,
-  userRoomId = null,
-) => {
+const updateUsersList = async (socket, mongoConnection, userRoomId = null) => {
   // Create response object
   const response = {
-    target: socket.id,
+    requestAuthor: socket.id,
     message: null,
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('HH:mm:ss'),
@@ -122,5 +118,5 @@ const updateUserInRoomList = async (
 };
 
 module.exports = {
-  updateUserInRoomList,
+  updateUsersList,
 };
