@@ -9,14 +9,18 @@ const config = {
 };
 let mongoConnection;
 
-const openMongoConnection = async () => {
+const openMongoConnection = async (logger) => {
   try {
     mongoConnection = await MongoClient.connect(uri, config);
-    // TODO handle logs, delete consol.log
-    console.log('Connected successfully to database server.');
+    logger.log({
+      level: 'info',
+      message: 'Connected successfully to database server.',
+    });
   } catch (err) {
-    // TODO handle logs, delete consol.log
-    console.error(`Connection fail to database server. ${err}.`);
+    logger.log({
+      level: 'error',
+      message: err,
+    });
   }
 };
 

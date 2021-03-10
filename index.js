@@ -1,9 +1,10 @@
+const { logger } = require('./libs/winston/winston-config');
 const http = require('http');
 const express = require('express');
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
-require('./libs/socket-io/socket-io-server')(io);
+require('./libs/socket-io/socket-io-server')(io, logger);
 const path = require('path');
 const { port, host } = require('./config');
 const {
@@ -17,17 +18,24 @@ app.set('views', path.join(__dirname, './views'));
 app.use(express.static(path.join(__dirname, './public')));
 
 require('./routers/chat-room-router')(app);
+app.get('/*', (req, res) => {
+  res.redirect('/');
+});
 
 (async () => {
   try {
-    await openMongoConnection();
-    await clearMongoDatabase(getMongoConnection());
+    await openMongoConnection(logger);
+    await clearMongoDatabase(getMongoConnection(), logger);
     server.listen(port, host, () => {
-      //TODO handle logs, delete consol.log
-      console.log(`Server is listening on ${host}:${port}.`);
+      logger.log({
+        level: 'info',
+        message: `Server is listening on ${host}:${port}.`,
+      });
     });
   } catch (err) {
-    //TODO handle logs, delete consol.log
-    console.error(`Server isn't listening. ${err}.`);
+    logger.log({
+      level: 'error',
+      message: err,
+    });
   }
 })();

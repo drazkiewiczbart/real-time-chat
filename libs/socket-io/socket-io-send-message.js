@@ -1,7 +1,7 @@
 const moment = require('moment');
 const { dbName } = require('../../config');
 
-const sendMessage = async (socket, mongoConnection, message) => {
+const sendMessage = async (socket, mongoConnection, logger, message) => {
   // Create response object
   const response = {
     from: null,
@@ -49,11 +49,14 @@ const sendMessage = async (socket, mongoConnection, message) => {
     socket.emit('sendMessage', response);
   } catch (err) {
     // Set and emit message
+    response.from = 'Chat bot';
     response.message = 'We have a problem, please try again later.';
     response.status = false;
     socket.emit('sendMessage', response);
-    //TODO handle logs, delete consol.log
-    console.log(err);
+    logger.log({
+      level: 'error',
+      message: err,
+    });
   }
 };
 
