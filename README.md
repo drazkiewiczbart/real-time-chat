@@ -1,5 +1,5 @@
 ### Table of contents
-* [General information](#general-info)  
+* [General information](#general-information)  
 * [How to use](#how-to-use)  
 * [Core technologies](#core-technologies)  
 * [Additional technologies](#additional-technologies)  
@@ -8,9 +8,10 @@
 * [License](#license)
 
 # Real-time chat application
+Simple Node.js chat application. Education and portfolio second project.
 
 ## General information  
-Education and portfolio second project. Chat application allows create or join to room, change name, send messages and check who is in the room. You can preview project [here](https://bit.ly/3680hKa).  
+Chat application allows create or join to room, change name, send messages and check who is in the room. You can preview project [here](https://bit.ly/3680hKa).  
 
 ## How to use
 1. Clone repository  
