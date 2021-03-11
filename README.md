@@ -1,12 +1,3 @@
-### Table of contents
-* [General information](#general-information)  
-* [How to use](#how-to-use)  
-* [Core technologies](#core-technologies)  
-* [Additional technologies](#additional-technologies)  
-* [What I learned](#what-i-learned)  
-* [To Do](#to-do)
-* [License](#license)
-
 # Real-time chat application
 Simple Node.js chat application. Education and portfolio second project.
 
