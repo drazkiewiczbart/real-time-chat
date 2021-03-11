@@ -11,8 +11,12 @@
       crossorigin="anonymous"
     />
     <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap"
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
     />
     <link rel="stylesheet" href="others/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="/stylesheets/main.css" />
@@ -28,7 +32,8 @@
   <body>
     <div class="container main-wrapper">
       <div class="row header">
-        <div class="col col-md-10 header-content">
+        <div class="col col-md-9 header-content">
+          <p class="header-content-before-title">Real-time chat application</p>
           <h1 id="header-content-title" class="header-content-title">
             Messages
           </h1>
@@ -38,7 +43,7 @@
         <div class="col col-md-9 menu-content">
           <i
             id="menu-content-messages-icon"
-            class="fas fa-comments menu-content-icon menu-content-icon--active"
+            class="fas fa-comments menu-content-icon menu-content-icon-message--active"
           ></i>
           <i
             id="menu-content-users-icon"
@@ -73,8 +78,7 @@
               ><span
                 class="settings-content-name--description settings-content-name--small"
                 ><br />This is your name.<br />
-                In room can be only one user with one name.<br />
-                You can change it below.</span
+                You can change name below.</span
               >
             </p>
             <p class="settings-content-room">
@@ -84,7 +88,6 @@
               ><span
                 class="settings-content-name--description settings-content-name--small"
                 ><br />This is your room.<br />
-                In this room only you see your messages.<br />
                 You can change room below.</span
               >
             </p>
@@ -108,8 +111,7 @@
               </button>
             </div>
             <p class="settings-content-actions-input-descriptions">
-              If name exists in your current room or exists in room where you
-              want join you get warn message and your name will be not change.
+              In room can be only one user with one name.
             </p>
             <div class="input-group settings-content-actions-input">
               <input
@@ -128,8 +130,7 @@
               </button>
             </div>
             <p class="settings-content-actions-input-descriptions">
-              If room doesn't exists will be create. Room is destroyed when last
-              person leave them.
+              If room do not exists will be create.
             </p>
             <button
               id="settings-content-actions-input-button-leave"
@@ -166,6 +167,7 @@
                 disabled
               >
                 <i
+                  id="footer-content-form-content-button-icon"
                   class="fas fa-paper-plane footer-content-form-content-button-icon"
                 ></i>
               </button>

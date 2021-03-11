@@ -1,3 +1,7 @@
+textarea {
+  border: none;
+}
+
 .footer {
   justify-content: center;
 }
@@ -7,8 +11,8 @@
 }
 
 .footer-content {
-  padding: 2rem 0;
-  border-top: 0.1rem solid rgb(221, 221, 221);
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .footer-content-form {
@@ -17,41 +21,49 @@
 }
 
 .footer-content-form-content-text {
-  padding: 0.5rem;
+  border: none;
+  border-radius: 1rem;
+  padding: 1rem 2rem;
   font-size: 1.3rem;
   resize: none;
-  border: 0.1rem solid rgb(221, 221, 221);
+  background-color: rgb(247, 247, 247);
 }
 
 .footer-content-form-content-text:focus {
   box-shadow: none;
-  border: 0.1rem solid rgb(221, 221, 221);
+  border: none;
+  background-color: rgb(247, 247, 247);
 }
 
 .footer-content-form-content-text::placeholder {
-  color: rgb(221, 221, 221);
+  color: rgb(206, 206, 206);
 }
 
 .footer-content-form-content-button {
   margin: 0 0 0 1rem;
-  padding: 0 1rem;
-  background-color: rgb(0, 35, 131);
+  padding: 0 2rem;
+  background-color: rgb(78, 56, 166);
+  border-radius: 0 1rem 0 0;
   border: none;
 }
 
 .footer-content-form-content-button:disabled {
-  background-color: rgb(0, 35, 131);
+  background-color: rgb(78, 56, 166);
+  border-radius: 0 1rem 0 0;
+  color: rgb(255, 255, 255);
   border: none;
   opacity: 0.65;
 }
 
 .footer-content-form-content-button:hover,
 .footer-content-form-content-button:focus {
-  background-color: rgb(0, 35, 131);
+  background-color: rgb(78, 56, 166);
+  border-radius: 0 1rem 0 0;
   border: none;
 }
 
 .footer-content-form-content-button-icon {
   font-size: 2.4rem;
   color: rgb(255, 255, 255);
+  opacity: 1;
 }

@@ -15,27 +15,34 @@
   padding: 3rem 2rem;
   flex-grow: 10;
   font-size: 1.4rem;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .users-in-room-content--you {
   padding: 0;
   font-size: 1.6rem;
   font-weight: 700;
-  color: rgb(0, 35, 131);
+  color: rgb(78, 56, 166);
 }
 
 .users-in-room-content-update {
+  display: flex;
   flex-direction: column;
+  justify-content: center;
   padding: 3rem 2rem;
   font-size: 1rem;
   font-weight: 400;
-  color: rgb(189, 189, 189);
-  border-top: 0.1rem solid rgb(221, 221, 221);
+  color: rgb(206, 206, 206);
+  /* border-top: 0.1rem solid rgb(206, 206, 206); */
 }
 
 .users-in-room-content-button-update,
 .users-in-room-content-button-update:hover {
   font-size: 1.3rem;
   color: rgb(255, 255, 255);
-  background-color: rgb(0, 35, 131);
+  background-color: rgb(78, 56, 166);
+}
+
+.users-in-room-content-update p {
+  margin: 0;
 }

@@ -13,46 +13,72 @@ window.addEventListener('resize', () => {
  */
 // Settings
 $('#menu-content-settings-icon').click(() => {
-  if (!$('#menu-content-settings-icon').hasClass('menu-content-icon--active')) {
+  if (
+    !$('#menu-content-settings-icon').hasClass(
+      'menu-content-icon-settings--active',
+    )
+  ) {
     $('#settings').removeClass('settings--hide');
     $('#header-content-title').text('Settings');
-    $('#menu-content-settings-icon').addClass('menu-content-icon--active');
+    $('#menu-content-settings-icon').addClass(
+      'menu-content-icon-settings--active',
+    );
 
     $('#messages').addClass('messages--hide');
     $('#users-in-room').addClass('users-in-room--hide');
     $('#footer').addClass('footer--hide');
-    $('#menu-content-users-icon').removeClass('menu-content-icon--active');
-    $('#menu-content-messages-icon').removeClass('menu-content-icon--active');
+    $('#menu-content-users-icon').removeClass(
+      'menu-content-icon-users--active',
+    );
+    $('#menu-content-messages-icon').removeClass(
+      'menu-content-icon-message--active',
+    );
   }
 });
 
 // Messages
 $('#menu-content-messages-icon').click(() => {
-  if (!$('#menu-content-messages-icon').hasClass('menu-content-icon--active')) {
+  if (
+    !$('#menu-content-messages-icon').hasClass(
+      'menu-content-icon-message--active',
+    )
+  ) {
     $('#messages').removeClass('messages--hide');
     $('#header-content-title').text('Messages');
-    $('#menu-content-messages-icon').addClass('menu-content-icon--active');
+    $('#menu-content-messages-icon').addClass(
+      'menu-content-icon-message--active',
+    );
 
     $('#settings').addClass('settings--hide');
     $('#users-in-room').addClass('users-in-room--hide');
     $('#footer').removeClass('footer--hide');
-    $('#menu-content-users-icon').removeClass('menu-content-icon--active');
-    $('#menu-content-settings-icon').removeClass('menu-content-icon--active');
+    $('#menu-content-users-icon').removeClass(
+      'menu-content-icon-users--active',
+    );
+    $('#menu-content-settings-icon').removeClass(
+      'menu-content-icon-settings--active',
+    );
   }
 });
 
 // Users
 $('#menu-content-users-icon').click(() => {
-  if (!$('#menu-content-users-icon').hasClass('menu-content-icon--active')) {
+  if (
+    !$('#menu-content-users-icon').hasClass('menu-content-icon-users--active')
+  ) {
     $('#users-in-room').removeClass('users-in-room--hide');
     $('#header-content-title').text('Users in room');
-    $('#menu-content-users-icon').addClass('menu-content-icon--active');
+    $('#menu-content-users-icon').addClass('menu-content-icon-users--active');
 
     $('#settings').addClass('settings--hide');
     $('#messages').addClass('messages--hide');
     $('#footer').addClass('footer--hide');
-    $('#menu-content-messages-icon').removeClass('menu-content-icon--active');
-    $('#menu-content-settings-icon').removeClass('menu-content-icon--active');
+    $('#menu-content-messages-icon').removeClass(
+      'menu-content-icon-message--active',
+    );
+    $('#menu-content-settings-icon').removeClass(
+      'menu-content-icon-settings--active',
+    );
   }
 });
 

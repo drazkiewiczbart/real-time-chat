@@ -11,6 +11,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .settings-content-data {
@@ -34,7 +35,7 @@
 #settings-content-name,
 #settings-content-room,
 .settings-content-actions-title {
-  color: rgb(0, 35, 131);
+  color: rgb(78, 56, 166);
 }
 
 .settings-content-name--description,
@@ -46,7 +47,7 @@
 .settings-content-name--small {
   font-size: 1rem;
   font-weight: 400;
-  color: rgb(189, 189, 189);
+  color: rgb(206, 206, 206);
 }
 
 .settings-content-actions {
@@ -56,30 +57,29 @@
   justify-content: space-evenly;
   align-items: center;
   padding: 2rem 0;
-  border-top: 0.1rem solid rgb(221, 221, 221);
-  border-bottom: 0.1rem solid rgb(221, 221, 221);
+  border-top: 0.1rem solid rgb(206, 206, 206);
+  border-bottom: 0.1rem solid rgb(206, 206, 206);
 }
 
 .settings-content-actions-title {
-  margin: 0;
-  padding: 0;
+  margin: 0 0 1rem 0;
   font-size: 1.6rem;
-  font-weight: 700;
-  color: rgb(0, 0, 0);
+  font-weight: 400;
+  color: rgb(206, 206, 206);
 }
 
 .settings-content-actions-input-text {
   font-size: 1.3rem;
-  border: 0.1rem solid rgb(221, 221, 221);
+  border: 0.1rem solid rgb(206, 206, 206);
 }
 
 .settings-content-actions-input-text::placeholder {
-  color: rgb(221, 221, 221);
+  color: rgb(206, 206, 206);
 }
 
 .settings-content-actions-input-text:focus {
   box-shadow: none;
-  border: 0.1rem solid rgb(221, 221, 221);
+  border: 0.1rem solid rgb(206, 206, 206);
 }
 
 .settings-content-actions-input-button-join,
@@ -88,13 +88,13 @@
 .settings-content-actions-input-button-leave:hover {
   font-size: 1.3rem;
   color: rgb(255, 255, 255);
-  background-color: rgb(0, 35, 131);
+  background-color: rgb(78, 56, 166);
 }
 
 .settings-content-actions-input-descriptions {
   font-size: 1rem;
   font-weight: 400;
-  color: rgb(189, 189, 189);
+  color: rgb(206, 206, 206);
   text-align: center;
 }
 
@@ -104,7 +104,8 @@
   flex-grow: 2;
   justify-content: center;
   align-items: center;
-  color: rgb(189, 189, 189);
+  color: rgb(206, 206, 206);
+  text-align: center;
 }
 
 .settings-content-description p {

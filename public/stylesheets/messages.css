@@ -11,13 +11,14 @@
 .messages-content {
   display: flex;
   flex-direction: column;
-  padding: 3rem 0;
+  padding: 3rem 2rem;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .messages-content-single {
   margin: 0.5rem 0;
   padding: 1rem 1rem;
-  border-radius: 0.4rem;
+  border-radius: 0.8rem;
 }
 
 .messages-content-single--server {
@@ -33,14 +34,16 @@
   margin: 0;
   font-size: 1.6rem;
   font-weight: 700;
-  color: rgb(0, 35, 131);
+  color: rgb(78, 56, 166);
 }
 
 .messages-content-single-when {
-  color: rgb(177, 177, 177);
+  color: rgb(206, 206, 206);
 }
 
 .messages-content-single-text {
   margin: 0;
   font-size: 1.4rem;
+  padding: 1rem 0 0 2rem;
+  color: rgb(0, 0, 0);
 }

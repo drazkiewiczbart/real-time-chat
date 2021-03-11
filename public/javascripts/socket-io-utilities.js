@@ -7,8 +7,12 @@ const socket = io();
  ** Hide settings window
  */
 const hideSettings = () => {
-  $('#menu-content-messages-icon').toggleClass('menu-content-icon--active');
-  $('#menu-content-settings-icon').toggleClass('menu-content-icon--active');
+  $('#menu-content-messages-icon').toggleClass(
+    'menu-content-icon-message--active',
+  );
+  $('#menu-content-settings-icon').toggleClass(
+    'menu-content-icon-settings--active',
+  );
   $('#header-content-title').text('Messages');
   $('#settings').toggleClass('settings--hide');
   $('#messages').toggleClass('messages--hide');
