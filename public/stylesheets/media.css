@@ -1,3 +1,13 @@
+@media (max-width: 576px) {
+  .header-content {
+    padding: 1.7rem 0;
+  }
+
+  .menu-content {
+    padding: 0 0 1.7rem 0;
+  }
+}
+
 @media (min-width: 576px) {
   .settings-content-data {
     flex-direction: row;
