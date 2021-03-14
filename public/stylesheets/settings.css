@@ -112,3 +112,13 @@
   font-size: 1rem;
   margin: 0;
 }
+
+.footer-link {
+  font-weight: 700;
+  color: rgb(206, 206, 206);
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: rgb(206, 206, 206);
+}

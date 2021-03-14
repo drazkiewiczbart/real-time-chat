@@ -19,12 +19,12 @@
 
 @media (min-width: 992px) {
   html {
-    font-size: 12px;
+    font-size: 11px;
   }
 }
 
 @media (min-width: 1200px) {
   html {
-    font-size: 13px;
+    font-size: 11.5px;
   }
 }
