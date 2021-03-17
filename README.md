@@ -1,10 +1,10 @@
 # Real-time chat application
-Simple Node.js chat application. Education and portfolio second project.
+Chat application. Education and portfolio project.
 
-## General information  
-Chat application allows create or join to room or leave room, change name, send messages and check who is in the room. You can preview project [here](http://rtchat.toadres.pl).  
+## General information :speaker:  
+Chat application allows: create or join to room or leave room, change name, send messages and check who is in the room. You can preview project [here](http://rtchat.toadres.pl).  
 
-## How to use
+## How to use :speech_balloon:  
 1. Clone repository  
 2. Install dependencies  
 3. Create .env file into main directory  
@@ -12,26 +12,26 @@ Chat application allows create or join to room or leave room, change name, send 
 5. Start database server  
 6. From project main directory in terminal use 'npm run dev" command
 
-## Core technologies  
+## Core technologies :rocket:  
 * Node.js  
 * Express.js  
 * MongoDB (native Node.js driver) 
 * EJS
 
-## Additional technologies  
+## Additional technologies :link:  
 * Socket.io    
 * Winston
 * Bootstrap
 
-## What I learned  
+## What I learned :mortar_board:   
 * How to use socket  
 * Work with MongoDB native Node.js driver
 * Interact with frontend code  
-* Launch two Node applications in one VPS 
+* Launch two Node.js applications in one VPS 
 
-## To Do
-[ ] Add admin room role with functions e.g. kick user  
-[ ] Protected room - allow add password to room  
+## To Do :bulb:  
+- [ ] Add admin room role with functions e.g. kick user  
+- [ ] Protected room - allow add password to room  
 
-## License
+## License :closed_book:  
 [MIT](LICENSE)
