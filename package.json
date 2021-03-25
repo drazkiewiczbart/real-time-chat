@@ -1,11 +1,11 @@
 {
   "name": "real-time-chat",
   "version": "1.0.0",
-  "description": "Real-time chat application",
-  "main": "index.js",
+  "description": "Real-time chat application.",
+  "main": "app.js",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index"
+    "start": "node app",
+    "dev": "nodemon app"
   },
   "repository": {
     "type": "git",
@@ -29,14 +29,13 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "moment": "^2.29.1",
-    "mongodb": "^3.6.3",
-    "socket.io": "^3.1.1",
+    "mongodb": "^3.6.5",
+    "socket.io": "^4.0.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "eslint": "^7.20.0",
+    "eslint": "^7.22.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-import": "^2.22.1",
     "nodemon": "^2.0.7"
   }

@@ -1,17 +1,12 @@
-/*
- ** Resize window
- */
 let vh = window.innerHeight * 0.01;
+
 document.documentElement.style.setProperty('--vh', `${vh}px`);
+
 window.addEventListener('resize', () => {
   let vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty('--vh', `${vh}px`);
 });
 
-/*
- ** Switch between message, user and setting window
- */
-// Settings
 $('#menu-content-settings-icon').click(() => {
   if (
     !$('#menu-content-settings-icon').hasClass(
@@ -36,7 +31,6 @@ $('#menu-content-settings-icon').click(() => {
   }
 });
 
-// Messages
 $('#menu-content-messages-icon').click(() => {
   if (
     !$('#menu-content-messages-icon').hasClass(
@@ -61,7 +55,6 @@ $('#menu-content-messages-icon').click(() => {
   }
 });
 
-// Users
 $('#menu-content-users-icon').click(() => {
   if (
     !$('#menu-content-users-icon').hasClass('menu-content-icon-users--active')
@@ -82,9 +75,6 @@ $('#menu-content-users-icon').click(() => {
   }
 });
 
-/*
- ** Enable change name button if input has value
- */
 $('#settings-content-actions-input-text-name').keyup(() => {
   if ($('#settings-content-actions-input-text-name').val().length !== 0) {
     $('#settings-content-actions-input-button-name').prop('disabled', false);
@@ -93,9 +83,6 @@ $('#settings-content-actions-input-text-name').keyup(() => {
   }
 });
 
-/*
- ** Enable create or join button if input has value
- */
 $('#settings-content-actions-input-text').keyup(() => {
   if ($('#settings-content-actions-input-text').val().length !== 0) {
     $('#settings-content-actions-input-button-join').prop('disabled', false);
@@ -104,9 +91,6 @@ $('#settings-content-actions-input-text').keyup(() => {
   }
 });
 
-/*
- ** Enable message button if input has value
- */
 $('#footer-content-form-content-text').keyup(() => {
   if ($('#footer-content-form-content-text').val().length !== 0) {
     $('#footer-content-form-content-button').prop('disabled', false);

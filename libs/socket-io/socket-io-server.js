@@ -1,38 +1,37 @@
-const { userConnection } = require('./socket-io-user-connection');
-const { userDisconnect } = require('./socket-io-user-disconnect');
-const { sendMessage } = require('./socket-io-send-message');
-const { joinToRoom } = require('./socket-io-join-to-room');
-const { leaveRoom } = require('./socket-io-leave-room');
-const { changeName } = require('./socket-io-change-name');
-const { manualUpdateUsersList } = require('./socket-io-users-in-room');
-const { getMongoConnection } = require('../mongo/mongo-connection');
+const { userConnection } = require('./user-connection');
+const { userDisconnect } = require('./user-disconnect');
+const { sendMessage } = require('./send-message');
+const { joinToRoom } = require('./join-to-room');
+const { leaveRoom } = require('./leave-room');
+const { changeName } = require('./change-name');
+const { manualUpdateUsersList } = require('./users-in-room');
 
-module.exports = (io, logger) => {
+module.exports = (io) => {
   io.on('connection', async (socket) => {
-    await userConnection(socket, getMongoConnection(), logger);
+    await userConnection(socket);
 
     socket.on('disconnecting', async () => {
-      await userDisconnect(socket, getMongoConnection(), logger);
+      await userDisconnect(socket);
     });
 
     socket.on('sendMessage', async (message) => {
-      await sendMessage(socket, getMongoConnection(), logger, message);
+      await sendMessage(socket, message);
     });
 
     socket.on('joinToRoom', async (joinRoomName) => {
-      await joinToRoom(socket, getMongoConnection(), logger, joinRoomName);
+      await joinToRoom(socket, joinRoomName);
     });
 
     socket.on('leaveRoom', async () => {
-      await leaveRoom(socket, getMongoConnection(), logger);
+      await leaveRoom(socket);
     });
 
     socket.on('changeName', async (newUserName) => {
-      await changeName(socket, getMongoConnection(), logger, newUserName);
+      await changeName(socket, newUserName);
     });
 
     socket.on('manualUpdateUsersList', async () => {
-      await manualUpdateUsersList(socket, getMongoConnection(), logger);
+      await manualUpdateUsersList(socket);
     });
   });
 };

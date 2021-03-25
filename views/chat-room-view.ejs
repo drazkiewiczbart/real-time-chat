@@ -4,20 +4,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="others/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="/stylesheets/main.css" />
     <link rel="stylesheet" href="/stylesheets/header.css" />
@@ -41,117 +30,43 @@
       </div>
       <div class="row menu">
         <div class="col col-md-9 menu-content">
-          <i
-            id="menu-content-messages-icon"
-            class="fas fa-comments menu-content-icon menu-content-icon-message--active"
-          ></i>
-          <i
-            id="menu-content-users-icon"
-            class="fas fa-user-friends menu-content-icon"
-          ></i>
-          <i
-            id="menu-content-settings-icon"
-            class="fas fa-bars menu-content-icon"
-          ></i>
+          <i id="menu-content-messages-icon" class="fas fa-comments menu-content-icon menu-content-icon-message--active"></i>
+          <i id="menu-content-users-icon" class="fas fa-user-friends menu-content-icon"></i>
+          <i id="menu-content-settings-icon" class="fas fa-bars menu-content-icon"></i>
         </div>
       </div>
       <div id="messages" class="row messages">
         <div id="messages-content" class="col col-md-9 messages-content"></div>
       </div>
       <div id="users-in-room" class="row users-in-room users-in-room--hide">
-        <div
-          id="users-in-room-content"
-          class="col col-md-9 users-in-room-content"
-        ></div>
-        <div
-          id="users-in-room-content-update"
-          class="col col-md-9 users-in-room-content-update"
-        ></div>
+        <div id="users-in-room-content" class="col col-md-9 users-in-room-content"></div>
+        <div id="users-in-room-content-update" class="col col-md-9 users-in-room-content-update"></div>
       </div>
       <div id="settings" class="row settings settings--hide">
         <div class="col settings-content">
           <div class="col-9 settings-content-data">
             <p class="settings-content-name">
-              <span class="settings-content-name--description"
-                >Your current name</span
-              ><br /><span id="settings-content-name">New user</span
-              ><span
-                class="settings-content-name--description settings-content-name--small"
-                ><br />This is your name.<br />
-                You can change name below.</span
-              >
+              <span class="settings-content-name--description">Your current name</span><br /><span id="settings-content-name">New user</span><span class="settings-content-name--description settings-content-name--small"><br />This is your name.<br />You can change name below.</span>
             </p>
-            <p class="settings-content-room">
-              <span class="settings-content-room--description"
-                >Your current room</span
-              ><br /><span id="settings-content-room">Private/Default</span
-              ><span
-                class="settings-content-name--description settings-content-name--small"
-                ><br />This is your room.<br />
-                You can change room below.</span
-              >
+            <p class="settings-content-room"><span class="settings-content-room--description">Your current room</span><br /><span id="settings-content-room">Private/Default</span><span class="settings-content-name--description settings-content-name--small"><br />This is your room.<br />You can change room below.</span>
             </p>
           </div>
           <div class="col-9 settings-content-actions">
             <p class="settings-content-actions-title">Actions</p>
             <div class="input-group settings-content-actions-input">
-              <input
-                id="settings-content-actions-input-text-name"
-                type="text"
-                class="form-control settings-content-actions-input-text"
-                placeholder="New name"
-              />
-              <button
-                id="settings-content-actions-input-button-name"
-                class="btn settings-content-actions-input-button-join"
-                type="submit"
-                disabled
-              >
-                Change name
-              </button>
+              <input id="settings-content-actions-input-text-name" type="text" class="form-control settings-content-actions-input-text" placeholder="New name"/>
+              <button id="settings-content-actions-input-button-name" class="btn settings-content-actions-input-button-join" type="submit" disabled>Change name</button>
             </div>
-            <p class="settings-content-actions-input-descriptions">
-              In room can be only one user with one name.
-            </p>
+            <p class="settings-content-actions-input-descriptions">In room can be only one user with one name.</p>
             <div class="input-group settings-content-actions-input">
-              <input
-                id="settings-content-actions-input-text"
-                type="text"
-                class="form-control settings-content-actions-input-text"
-                placeholder="Room name"
+              <input id="settings-content-actions-input-text" type="text" class="form-control settings-content-actions-input-text" placeholder="Room name"
               />
-              <button
-                id="settings-content-actions-input-button-join"
-                class="btn settings-content-actions-input-button-join"
-                type="submit"
-                disabled
-              >
-                Create or join
-              </button>
+              <button id="settings-content-actions-input-button-join" class="btn settings-content-actions-input-button-join" type="submit" disabled>Create or join</button>
             </div>
-            <p class="settings-content-actions-input-descriptions">
-              If room do not exists will be create.
-            </p>
-            <button
-              id="settings-content-actions-input-button-leave"
-              type="button"
-              class="btn settings-content-actions-input-button-leave"
-              disabled
-            >
-              Leave room
-            </button>
+            <p class="settings-content-actions-input-descriptions">If room do not exists will be create.</p>
+            <button id="settings-content-actions-input-button-leave" type="button" class="btn settings-content-actions-input-button-leave" disabled>Leave room</button>
           </div>
-          <div class="col-9 settings-content-description">
-            <p>
-              Chat application allows create or join to room or leave room,
-              change name, send messages and check who is in the room. More
-              information about project on
-              <a
-                class="footer-link"
-                href="https://github.com/drazkiewiczbart/real-time-chat"
-                >GitHub</a
-              >.
-            </p>
+          <div class="col-9 settings-content-description"><p>Chat application allows create or join to room or leave room, change name, send messages and check who is in the room. More information about project on<a class="footer-link" href="https://github.com/drazkiewiczbart/real-time-chat"> GitHub</a>.</p>
           </div>
         </div>
       </div>
@@ -159,52 +74,24 @@
         <div class="col col-md-9 footer-content">
           <form id="footer-content-form" class="footer-content-form" action="">
             <div class="input-group footer-content-form-content">
-              <textarea
-                id="footer-content-form-content-text"
-                class="form-control footer-content-form-content-text"
-                placeholder="Type something"
-                autofocus
-                rows="3"
-              ></textarea>
-              <button
-                id="footer-content-form-content-button"
-                class="btn btn-outline-secondary footer-content-form-content-button"
-                type="submit"
-                disabled
-              >
-                <i
-                  id="footer-content-form-content-button-icon"
-                  class="fas fa-paper-plane footer-content-form-content-button-icon"
-                ></i>
-              </button>
+              <textarea id="footer-content-form-content-text" class="form-control footer-content-form-content-text" placeholder="Type something" autofocus rows="3"></textarea>
+              <button id="footer-content-form-content-button" class="btn btn-outline-secondary footer-content-form-content-button" type="submit" disabled><i id="footer-content-form-content-button-icon" class="fas fa-paper-plane footer-content-form-content-button-icon"></i></button>
             </div>
           </form>
         </div>
       </div>
     </div>
     <script type="module" src="/socket.io/socket.io.js"></script>
-    <script type="module" src="/javascripts/website-utilities.js"></script>
-    <script type="module" src="/javascripts/socket-io-utilities.js"></script>
-    <script type="module" src="/javascripts/socket-io-change-name.js"></script>
-    <script type="module" src="/javascripts/socket-io-join-to-room.js"></script>
-    <script type="module" src="/javascripts/socket-io-leave-room.js"></script>
-    <script type="module" src="/javascripts/socket-io-send-message.js"></script>
-    <script
-      type="module"
-      src="/javascripts/socket-io-user-connection.js"
-    ></script>
-    <script
-      type="module"
-      src="/javascripts/socket-io-user-disconnect.js"
-    ></script>
-    <script
-      type="module"
-      src="/javascripts/socket-io-users-in-room.js"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-      crossorigin="anonymous"
+    <script type="module" src="/javascripts/utilities/utilities.js"></script>
+    <script type="module" src="/javascripts/socket-io/utilities.js"></script>
+    <script type="module" src="/javascripts/socket-io/change-name.js"></script>
+    <script type="module" src="/javascripts/socket-io/join-to-room.js"></script>
+    <script type="module" src="/javascripts/socket-io/leave-room.js"></script>
+    <script type="module" src="/javascripts/socket-io/send-message.js"></script>
+    <script type="module" src="/javascripts/socket-io/user-connection.js"></script>
+    <script type="module" src="/javascripts/socket-io/user-disconnect.js"></script>
+    <script type="module" src="/javascripts/socket-io/users-in-room.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"
     ></script>
   </body>
 </html>

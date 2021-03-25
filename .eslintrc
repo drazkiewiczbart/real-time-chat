@@ -4,8 +4,7 @@
     "eslint:recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
-    "airbnb-base",
-    "prettier"
+    "airbnb-base"
   ],
   "env": {
     "browser": true,
@@ -14,6 +13,8 @@
     "jquery": true
   },
   "rules": {
-    "import/newline-after-import": "off"
+    "import/newline-after-import": "off",
+    "max-len": "off",
+    "import/extensions": "off"
   }
 }
