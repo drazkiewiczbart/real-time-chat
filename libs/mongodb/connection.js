@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 const { logger } = require('../winston/config');
 
-let databaseConnection = null;
+let databaseConnection;
 
 const establishDatabaseConnection = async () => {
   if (databaseConnection) return databaseConnection;
@@ -17,16 +17,30 @@ const establishDatabaseConnection = async () => {
 
     databaseConnection = await databaseClient.connect();
 
-    logger.log({ level: 'info', message: 'Database connected.' });
-
-    return databaseConnection;
+    logger.log({ level: 'info', message: 'Application connected to database server.' });
   } catch (err) {
-    logger.log({ level: 'error', message: `Connect database problem. ${err}` });
+    logger.log({ level: 'error', message: `Application has a problem to connect to database server. ${err}` });
+  }
+
+  try {
+    await databaseConnection
+      .db(process.env.DB_NAME)
+      .collection('users')
+      .drop();
+
+    await databaseConnection
+      .db(process.env.DB_NAME)
+      .collection('rooms')
+      .drop();
+
+    logger.log({ level: 'info', message: 'Database removed collections.' });
+  } catch (err) {
+    logger.log({ level: 'warn', message: `Database has a problem with remove collections. Probably collections do not exists. ${err}` });
   }
 };
 
-const getDatabaseConnection = () => {
-  if (!databaseConnection) return establishDatabaseConnection();
+const getDatabaseConnection = async () => {
+  if (!databaseConnection) await establishDatabaseConnection();
 
   return databaseConnection;
 };

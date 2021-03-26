@@ -24,7 +24,7 @@ const userConnection = async (socket) => {
 
     socket.emit('userConnection', response);
 
-    logger.log({ level: 'error', message: err });
+    logger.log({ level: 'error', message: `User connection error. ${err}` });
   }
 };
 

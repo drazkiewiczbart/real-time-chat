@@ -86,7 +86,7 @@ const changeName = async (socket, newUserName) => {
 
     socket.emit('changeName', response);
 
-    logger.log({ level: 'error', message: err });
+    logger.log({ level: 'error', message: `Change-name error. ${err}` });
   }
 };
 

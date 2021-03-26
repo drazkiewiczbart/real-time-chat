@@ -46,7 +46,7 @@ const sendMessage = async (socket, message) => {
 
     socket.emit('sendMessage', response);
 
-    logger.log({ level: 'error', message: err });
+    logger.log({ level: 'error', message: `Send message error. ${err}` });
   }
 };
 

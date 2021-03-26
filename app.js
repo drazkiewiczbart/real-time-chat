@@ -7,7 +7,7 @@ const express = require('express');
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
-require('./libs/socket-io/socket-io-server')(io);
+require('./libs/socket-io/server')(io);
 const path = require('path');
 const compression = require('compression');
 require('dotenv').config();
@@ -20,35 +20,37 @@ const { logger } = require('./libs/winston/config');
 
 try {
   server.listen(process.env.PORT, process.env.HOST, () => {
-    logger.log({ level: 'info', message: 'Server is listening.' });
+    logger.log({ level: 'info', message: 'Server listen.' });
   });
 } catch (err) {
-  logger.log({ level: 'error', message: `Start server problem. ${err}` });
+  logger.log({ level: 'error', message: `Server has a problem with start. ${err}` });
 }
 
 /*
-** Connection to database
+** Connection to database and clean collections
 */
 
 establishDatabaseConnection();
 
 /*
-** App set / use
+** Application settings
 */
 
+app.set('views');
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '/views'));
+app.set('x-powered-by', false);
+
+/*
+** Application middlewares
+*/
+
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(compression());
 
 /*
-** Routers
+** Application router
 */
 
-app.all('/', (req, res) => {
+app.all('*', (req, res) => {
   res.render('chat-room-view');
-});
-
-app.all('/*', (req, res) => {
-  res.redirect('/');
 });

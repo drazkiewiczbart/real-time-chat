@@ -60,7 +60,7 @@ const userDisconnect = async (socket) => {
 
     socket.emit('userDisconnect', response);
 
-    logger.log({ level: 'error', message: err });
+    logger.log({ level: 'error', message: `User disconnect error. ${err}` });
   }
 };
 

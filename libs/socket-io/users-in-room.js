@@ -94,7 +94,7 @@ const updateUsersList = async (socket, userRoomId = null) => {
 
     socket.emit('usersInRoom', response);
 
-    logger.log({ level: 'error', message: err });
+    logger.log({ level: 'error', message: `Users-in-room error. ${err}` });
   }
 };
 
@@ -133,7 +133,7 @@ const manualUpdateUsersList = async (socket) => {
 
     socket.emit('sendMessage', response);
 
-    logger.log({ level: 'error', message: err });
+    logger.log({ level: 'error', message: `Users-in-room error. ${err}` });
   }
 };
 

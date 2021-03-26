@@ -117,7 +117,7 @@ const joinToRoom = async (socket, joinRoomName) => {
 
     socket.emit('joinToRoom', response);
 
-    logger.log({ level: 'error', message: err });
+    logger.log({ level: 'error', message: `Join-to-room error. ${err}` });
   }
 };
 

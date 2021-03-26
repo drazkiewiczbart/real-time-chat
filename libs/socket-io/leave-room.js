@@ -62,7 +62,7 @@ const leaveRoom = async (socket) => {
 
     socket.emit('leaveRoom', response);
 
-    logger.log({ level: 'error', message: err });
+    logger.log({ level: 'error', message: `Leave-room error. ${err}` });
   }
 };
 
