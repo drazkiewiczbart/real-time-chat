@@ -39,10 +39,12 @@ const establishDatabaseConnection = async () => {
   }
 };
 
-const getDatabaseConnection = async () => {
-  if (!databaseConnection) await establishDatabaseConnection();
-
-  return databaseConnection;
+const getDatabaseConnection = () => {
+  if (!databaseConnection) {
+    throw new Error('Before get connection you must use establishDatabaseConnection function.');
+  } else {
+    return databaseConnection;
+  }
 };
 
 module.exports = {
