@@ -24,6 +24,7 @@ try {
   });
 } catch (err) {
   logger.log({ level: 'error', message: `Server has a problem with start. ${err}` });
+  process.exit();
 }
 
 /*

@@ -7,19 +7,18 @@ const establishDatabaseConnection = async () => {
   if (databaseConnection) return databaseConnection;
 
   try {
-    const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_USER_PWD}@${process.env.DB_HOST}:${process.env.DB_PORT}`;
     const config = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      authSource: process.env.DB_NAME,
     };
-    const databaseClient = new MongoClient(uri, config);
+    const databaseClient = new MongoClient(process.env.DB_PATH, config);
 
     databaseConnection = await databaseClient.connect();
 
     logger.log({ level: 'info', message: 'Application connected to database server.' });
   } catch (err) {
     logger.log({ level: 'error', message: `Application has a problem to connect to database server. ${err}` });
+    process.exit();
   }
 
   try {

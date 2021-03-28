@@ -8,7 +8,7 @@ Chat application allows: create or join to room or leave room, change name, send
 1. Clone repository  
 2. Install dependencies  
 3. Create .env file into main directory  
-4. Into .env file add PORT, HOST, DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_USER_PASSWORD constans and initialize them  
+4. Into .env file add PORT, HOST, DB_PATH, DB_NAME constans and initialize them  
 5. Start database server  
 6. From project main directory in terminal use 'npm run dev" command
 
