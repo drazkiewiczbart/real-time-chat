@@ -2,7 +2,7 @@
 Chat application. Education and portfolio project.
 
 ## General information :speaker:  
-Chat application allows: create or join to room or leave room, change name, send messages and check who is in the room. You can preview project [here](http://rtchat.toadres.pl).  
+Chat application allows: create or join to room or leave room, change name, send messages and check who is in the room. You can preview project [here](http://rtchat.drazkiewiczbart.com).  
 
 ## How to use :speech_balloon:  
 1. Clone repository  
