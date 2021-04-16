@@ -25,8 +25,10 @@ const clearMessageWindow = () => {
   $('#messages-content').html('');
 };
 
-const createMessageView = (message, date, time, from = 'Chat bot') => {
+const createMessageView = (message, from = 'Chat bot') => {
   const isMessageFromServer = from === 'Chat bot' ? 'messages-content-single--server' : '';
+  const date = moment().format('YYYY-MM-DD');
+  const time = moment().format('HH:mm:ss');
 
   const messageView = `
     <div class="messages-content-single ${isMessageFromServer}">

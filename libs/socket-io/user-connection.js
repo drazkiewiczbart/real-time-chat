@@ -13,7 +13,7 @@ const userConnection = async (socket) => {
 
     await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('users')
+      .collection('rtchatusers')
       .insertOne({ _id: socket.id, name: 'New user', roomId: null });
 
     socket.emit('userConnection', response);

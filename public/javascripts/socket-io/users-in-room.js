@@ -44,20 +44,23 @@ const createMessageView = (message, status) => {
   return usersContainer;
 };
 
-const publishMessageInUsersInRoom = (message, date, time, status) => {
+const publishMessageInUsersInRoom = (message, status) => {
   $('#users-in-room').append(createMessageView(message, status));
+
+  const date = moment().format('YYYY-MM-DD');
+  const time = moment().format('HH:mm:ss');
 
   if (status) $('#users-in-room').append(createUpdateTimeView(date, time));
 };
 
 socket.on('usersInRoom', (serverResponse) => {
-  const { status, message, date, time } = serverResponse;
+  const { status, message } = serverResponse;
 
   clearUsersInRoomWindow();
 
   clearUpdateDateWindow();
 
-  publishMessageInUsersInRoom(message, date, time, status);
+  publishMessageInUsersInRoom(message, status);
 });
 
 $(document).on('click', '#users-in-room-content-button-update', () => {

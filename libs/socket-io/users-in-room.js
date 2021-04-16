@@ -9,23 +9,23 @@ const updateUsersList = async (socket, userRoomId = null) => {
   try {
     const isUserExists = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('users')
+      .collection('rtchatusers')
       .findOne({ _id: socket.id });
 
     const isRoomExists = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rooms')
+      .collection('rtchatrooms')
       .findOne({ _id: userRoomId });
 
     const isUserInRoom = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rooms')
+      .collection('rtchatrooms')
       .findOne({ _id: userRoomId, 'connectedUsers.socketId': socket.id });
 
     if (!isUserExists && isRoomExists) {
       const { name: roomName, connectedUsers: usersInRoom } = await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rooms')
+        .collection('rtchatrooms')
         .findOne({ _id: userRoomId });
 
       response.status = true;
@@ -41,7 +41,7 @@ const updateUsersList = async (socket, userRoomId = null) => {
     if (!isRoomExists) {
       const { _id: userId, name: userName } = await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('users')
+        .collection('rtchatusers')
         .findOne({ _id: socket.id });
 
       response.status = true;
@@ -55,12 +55,12 @@ const updateUsersList = async (socket, userRoomId = null) => {
     if (isRoomExists && !isUserInRoom) {
       const { _id: userId, name: userName } = await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('users')
+        .collection('rtchatusers')
         .findOne({ _id: socket.id });
 
       const { name: roomName, connectedUsers: usersInRoom } = await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rooms')
+        .collection('rtchatrooms')
         .findOne({ _id: userRoomId });
 
       response.status = true;
@@ -77,7 +77,7 @@ const updateUsersList = async (socket, userRoomId = null) => {
 
     const { name: roomName, connectedUsers: usersInRoom } = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rooms')
+      .collection('rtchatrooms')
       .findOne({ _id: userRoomId });
 
     response.status = true;
@@ -105,7 +105,7 @@ const manualUpdateUsersList = async (socket) => {
   try {
     const { _id: userId, name: userName, roomId: userRoomId } = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('users')
+      .collection('rtchatusers')
       .findOne({ _id: socket.id });
 
     if (!userRoomId) {
@@ -119,7 +119,7 @@ const manualUpdateUsersList = async (socket) => {
 
     const { connectedUsers: usersInRoom } = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rooms')
+      .collection('rtchatrooms')
       .findOne({ _id: userRoomId });
 
     response.status = true;

@@ -20,7 +20,7 @@ const sendMessage = async (socket, message) => {
   try {
     const { name: userName, roomId: userRoomId } = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('users')
+      .collection('rtchatusers')
       .findOne({ _id: socket.id });
 
     response.from = userName;
@@ -28,7 +28,7 @@ const sendMessage = async (socket, message) => {
     if (userRoomId) {
       const { name: roomName } = await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rooms')
+        .collection('rtchatrooms')
         .findOne({ _id: userRoomId });
 
       socket

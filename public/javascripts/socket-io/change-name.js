@@ -10,11 +10,11 @@ const changeDisplayName = (name) => {
 };
 
 socket.on('changeName', (serverResponse) => {
-  const { status, requestAuthor, message, data, date, time } = serverResponse;
+  const { status, requestAuthor, message, data } = serverResponse;
 
   if (status && requestAuthor === socket.id) changeDisplayName(data);
 
-  const messageView = createMessageView(message, date, time);
+  const messageView = createMessageView(message);
 
   publishMessage(messageView);
 

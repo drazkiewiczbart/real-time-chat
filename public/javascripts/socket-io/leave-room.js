@@ -6,7 +6,7 @@ const restoreLeaveRoomView = () => {
 };
 
 socket.on('leaveRoom', (serverResponse) => {
-  const { status, requestAuthor, message, date, time } = serverResponse;
+  const { status, requestAuthor, message } = serverResponse;
 
   if (status && requestAuthor === socket.id) {
     restoreLeaveRoomView();
@@ -14,7 +14,7 @@ socket.on('leaveRoom', (serverResponse) => {
     clearMessageWindow();
   }
 
-  const messageView = createMessageView(message, date, time);
+  const messageView = createMessageView(message);
 
   publishMessage(messageView);
 

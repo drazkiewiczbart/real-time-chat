@@ -5,9 +5,9 @@ const restoreMessageInput = () => {
 };
 
 socket.on('sendMessage', (serverResponse) => {
-  const { message, from, date, time } = serverResponse;
+  const { message, from } = serverResponse;
 
-  const messageView = createMessageView(message, date, time, from);
+  const messageView = createMessageView(message, from);
 
   publishMessage(messageView);
 

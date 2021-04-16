@@ -8,15 +8,15 @@ const userDisconnect = async (socket) => {
   response.requestAuthor = socket.id;
 
   try {
-    const { _id: userId, name: userName, roomId: userRoomId, } = await getDatabaseConnection()
+    const { _id: userId, name: userName, roomId: userRoomId } = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('users')
+      .collection('rtchatusers')
       .findOne({ _id: socket.id });
 
     if (!userRoomId) {
       await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('users')
+        .collection('rtchatusers')
         .deleteOne({ _id: userId });
 
       return;
@@ -24,23 +24,23 @@ const userDisconnect = async (socket) => {
 
     await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('users')
+      .collection('rtchatusers')
       .deleteOne({ _id: userId });
 
     await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rooms')
+      .collection('rtchatrooms')
       .updateOne({ _id: userRoomId }, { $pull: { connectedUsers: { socketId: userId } } });
 
     const { name: roomName, connectedUsers: usersInRoom } = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rooms')
+      .collection('rtchatrooms')
       .findOne({ _id: userRoomId });
 
     if (usersInRoom.length === 0) {
       await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rooms')
+        .collection('rtchatrooms')
         .deleteOne({ _id: userRoomId });
 
       return;

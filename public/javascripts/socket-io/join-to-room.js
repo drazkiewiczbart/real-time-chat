@@ -11,7 +11,7 @@ const changeDisplayRoom = (name) => {
 };
 
 socket.on('joinToRoom', (serverResponse) => {
-  const { status, requestAuthor, message, data, date, time } = serverResponse;
+  const { status, requestAuthor, message, data } = serverResponse;
 
   if (status && requestAuthor === socket.id) {
     changeDisplayRoom(data);
@@ -19,7 +19,7 @@ socket.on('joinToRoom', (serverResponse) => {
     clearMessageWindow();
   }
 
-  const messageView = createMessageView(message, date, time);
+  const messageView = createMessageView(message);
 
   publishMessage(messageView);
 

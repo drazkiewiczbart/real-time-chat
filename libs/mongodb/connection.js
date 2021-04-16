@@ -24,12 +24,12 @@ const establishDatabaseConnection = async () => {
   try {
     await databaseConnection
       .db(process.env.DB_NAME)
-      .collection('users')
+      .collection('rtchatusers')
       .drop();
 
     await databaseConnection
       .db(process.env.DB_NAME)
-      .collection('rooms')
+      .collection('rtchatrooms')
       .drop();
 
     logger.log({ level: 'info', message: 'Database removed collections.' });

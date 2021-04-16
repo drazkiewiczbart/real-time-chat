@@ -20,7 +20,7 @@ const joinToRoom = async (socket, joinRoomName) => {
   try {
     const { _id: userId, name: userName, roomId: userRoomId } = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('users')
+      .collection('rtchatusers')
       .findOne({ _id: socket.id });
 
     if (userRoomId) {
@@ -34,28 +34,28 @@ const joinToRoom = async (socket, joinRoomName) => {
 
     const isRoomExists = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rooms')
+      .collection('rtchatrooms')
       .findOne({ name: joinRoomName });
 
     if (!isRoomExists) {
       await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rooms')
+        .collection('rtchatrooms')
         .insertOne({ name: joinRoomName, connectedUsers: [] });
 
       const { _id: roomId } = await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rooms')
+        .collection('rtchatrooms')
         .findOne({ name: joinRoomName });
 
       await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rooms')
+        .collection('rtchatrooms')
         .updateOne({ _id: roomId }, { $push: { connectedUsers: { socketId: userId, name: userName } } });
 
       await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('users')
+        .collection('rtchatusers')
         .updateOne({ _id: userId }, { $set: { roomId } });
 
       socket.join(joinRoomName);
@@ -72,31 +72,31 @@ const joinToRoom = async (socket, joinRoomName) => {
 
     const isUserNameUsed = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rooms')
+      .collection('rtchatrooms')
       .findOne({ name: joinRoomName, 'connectedUsers.name': userName });
 
     if (isUserNameUsed) {
       response.status = false;
       response.message = 'User with this name is already in this room. Choose different name.';
 
-      socket.emit('joinToRoom', response);
+      socket.emit('rtchatjoinToRoom', response);
 
       return;
     }
 
     const { _id: roomId, name: roomName } = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rooms')
+      .collection('rtchatrooms')
       .findOne({ name: joinRoomName });
 
     await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rooms')
+      .collection('rtchatrooms')
       .updateOne({ name: roomName }, { $push: { connectedUsers: { socketId: userId, name: userName } } });
 
     await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('users')
+      .collection('rtchatusers')
       .updateOne({ _id: userId }, { $set: { roomId } });
 
     socket.join(roomName);
