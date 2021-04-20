@@ -20,13 +20,13 @@ const changeName = async (socket, newUserName) => {
   try {
     const { _id: userId, name: userName, roomId: userRoomId } = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rtchatusers')
+      .collection('users')
       .findOne({ _id: socket.id });
 
     if (userRoomId) {
       const isUserNameExists = await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rtchatrooms')
+        .collection('rooms')
         .findOne({ _id: userRoomId, 'connectedUsers.name': newUserName });
 
       if (isUserNameExists) {
@@ -40,17 +40,17 @@ const changeName = async (socket, newUserName) => {
 
       await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rtchatusers')
+        .collection('users')
         .updateOne({ _id: userId }, { $set: { name: newUserName } });
 
       await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rtchatrooms')
+        .collection('rooms')
         .updateOne({ _id: userRoomId, 'connectedUsers.name': userName }, { $set: { 'connectedUsers.$.name': newUserName } });
 
       const { name: roomName } = await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rtchatrooms')
+        .collection('rooms')
         .findOne({ _id: userRoomId });
 
       response.status = true;
@@ -71,7 +71,7 @@ const changeName = async (socket, newUserName) => {
 
     await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rtchatusers')
+      .collection('users')
       .updateOne({ _id: userId }, { $set: { name: newUserName } });
 
     response.status = true;

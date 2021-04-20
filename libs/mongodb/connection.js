@@ -24,18 +24,20 @@ const establishDatabaseConnection = async () => {
   try {
     await databaseConnection
       .db(process.env.DB_NAME)
-      .collection('rtchatusers')
+      .collection('users')
       .drop();
 
     await databaseConnection
       .db(process.env.DB_NAME)
-      .collection('rtchatrooms')
+      .collection('rooms')
       .drop();
 
     logger.log({ level: 'info', message: 'Database removed collections.' });
   } catch (err) {
     logger.log({ level: 'warn', message: `Database has a problem with remove collections. Probably collections do not exists. ${err}` });
   }
+
+  return null;
 };
 
 const getDatabaseConnection = () => {

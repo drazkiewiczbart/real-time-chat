@@ -10,7 +10,7 @@ const leaveRoom = async (socket) => {
   try {
     const { _id: userId, name: userName, roomId: userRoomId } = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rtchatusers')
+      .collection('users')
       .findOne({ _id: socket.id });
 
     if (!userRoomId) {
@@ -24,24 +24,24 @@ const leaveRoom = async (socket) => {
 
     await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rtchatrooms')
+      .collection('rooms')
       .updateOne({ _id: userRoomId }, { $pull: { connectedUsers: { socketId: userId } } });
 
     const { name: roomName, connectedUsers: usersInRoom } = await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rtchatrooms')
+      .collection('rooms')
       .findOne({ _id: userRoomId });
 
     if (usersInRoom.length === 0) {
       await getDatabaseConnection()
         .db(process.env.DB_NAME)
-        .collection('rtchatrooms')
+        .collection('rooms')
         .deleteOne({ _id: userRoomId });
     }
 
     await getDatabaseConnection()
       .db(process.env.DB_NAME)
-      .collection('rtchatusers')
+      .collection('users')
       .updateOne({ _id: userId }, { $set: { roomId: null } });
 
     socket.leave(roomName);
